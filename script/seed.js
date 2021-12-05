@@ -1,7 +1,14 @@
+const fs = require('fs');
+const path = require('path');
+
 const {
   db,
   models: { User },
 } = require('../server/db');
+
+const SEED_DATA = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../', 'bin', 'seed.json'), 'utf8')
+);
 
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
@@ -12,8 +19,12 @@ async function seed() {
     User.create({ username: 'cody', password: '123' }),
     User.create({ username: 'murphy', password: '123' }),
   ]);
-
   console.log(`seeded ${users.length} users`);
+
+  // Sync SEED_DATA
+  // Model.bulkCreate(SEED_DATA); <-- uncomment this
+  // console.log(`seeded ${SEED_DATA.length} data entries`); <-- uncomment this
+
   console.log(`seeded successfully`);
   return {
     users: {

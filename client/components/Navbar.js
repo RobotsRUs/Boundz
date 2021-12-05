@@ -5,7 +5,7 @@ import { logout } from '../store';
 
 const Navbar = ({ handleClick, isLoggedIn }) => (
   <div>
-    <h1>FS-App-Template</h1>
+    <h1>GS-App-Template</h1>
     <nav>
       {isLoggedIn ? (
         <div>
@@ -27,9 +27,6 @@ const Navbar = ({ handleClick, isLoggedIn }) => (
   </div>
 );
 
-/**
- * CONTAINER
- */
 const mapState = (state) => {
   return {
     isLoggedIn: !!state.auth.id,
