@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 // Routes:
-router.use('/route-template', require('./route_template'));
+router.use('/products', require('./products'));
 router.use('/users', require('./users'));
 
 // 404:
