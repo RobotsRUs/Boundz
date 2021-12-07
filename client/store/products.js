@@ -10,7 +10,6 @@ const fetchAllProducts = (productList) => ({
 export const fetchAllProductsThunk = () => async (dispatch) => {
   try {
     const { data } = await axios.get('/api/products');
-    console.log('this is the thunk data ', data);
     dispatch(fetchAllProducts(data));
   } catch (error) {
     console.error('There was an error retrieving all products: ', error);

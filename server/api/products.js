@@ -1,5 +1,7 @@
 const router = require('express').Router();
-const Product = require('../db/index');
+const {
+  models: { Product },
+} = require('../db');
 
 // GET /api/products
 router.get('/', async (req, res, next) => {
@@ -8,6 +10,22 @@ router.get('/', async (req, res, next) => {
     res.send(allProducts);
   } catch (err) {
     next(err);
+  }
+});
+
+// GET /api/products/:productId
+router.get('/:productId', async (req, res, next) => {
+  try {
+    const product = await Product.findById(req.params.productId);
+    if (!product) {
+      const err = new Error('Not found');
+      err.status = 404;
+      throw err;
+    } else {
+      res.json(product);
+    }
+  } catch (error) {
+    next(error);
   }
 });
 
