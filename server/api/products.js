@@ -4,7 +4,14 @@ const {
 } = require('../db');
 
 // GET /api/products
-router.get('/', (req, res, next) => {});
+router.get('/', async (req, res, next) => {
+  try {
+    const allProducts = await Product.findAll();
+    res.send(allProducts);
+  } catch (err) {
+    next(err);
+  }
+});
 
 // GET /api/products/:productId
 router.get('/:productId', async (req, res, next) => {
