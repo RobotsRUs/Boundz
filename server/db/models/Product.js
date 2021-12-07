@@ -11,7 +11,7 @@ const Product = db.define('product', {
     allowNull: false,
   },
   description: {
-    type: Sequelize.TEXT,
+    type: Sequelize.STRING,
   },
   summary: {
     type: Sequelize.TEXT,
@@ -25,6 +25,7 @@ const Product = db.define('product', {
   ISBN13: {
     type: Sequelize.STRING,
     allowNull: false,
+    unique: true,
   },
   imageUrl: {
     type: Sequelize.STRING,
@@ -35,7 +36,7 @@ const Product = db.define('product', {
     allowNull: false,
   },
   length: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: false,
   },
   publisher: {

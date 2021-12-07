@@ -18,7 +18,7 @@ const Order = db.define('order', {
   address2: {
     type: Sequelize.STRING,
   },
-  ity: {
+  city: {
     type: Sequelize.STRING,
   },
   state: {
