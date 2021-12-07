@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchProduct } from '../store';
+import { fetchProduct, clearProduct } from '../store';
 import Loading from './Loading';
 
 class SingleProduct extends React.Component {
@@ -21,6 +21,9 @@ class SingleProduct extends React.Component {
     if (this.props.book.id !== prevProps.book.id) {
       this.setState({ format: this.props.book.id });
     }
+  }
+  componentWillUnmount() {
+    this.props.clearProduct();
   }
   handleFormatChange(evt) {
     this.props.fetchProduct(evt.target.value);
@@ -117,5 +120,6 @@ const mapState = (state) => ({
 
 const mapDispatch = (dispatch) => ({
   fetchProduct: (productName) => dispatch(fetchProduct(productName)),
+  clearProduct: () => dispatch(clearProduct()),
 });
 export default connect(mapState, mapDispatch)(SingleProduct);
