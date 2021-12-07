@@ -1,5 +1,5 @@
 {
-  "name": "gs_boilerplate",
+  "name": "boundz",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -18,7 +18,7 @@
     "test:dev:routes": "npm run test:dev -- --grep=route"
   },
   "keywords": [],
-  "author": "Greg Solomon",
+  "author": "Greg Solomon, Carlos Lerma, Clifton Jones",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.24.0",
