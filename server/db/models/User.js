@@ -15,6 +15,50 @@ const User = db.define('user', {
   password: {
     type: Sequelize.STRING,
   },
+  firstName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  lastName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: Sequelize.STRING,
+    unique: true,
+    validate: {
+      isEmail: true,
+    },
+  },
+  phoneNumber: {
+    type: Sequelize.STRING,
+    validate: {
+      is: /^(1-)?\d{3}-\d{3}-\d{4}$/,
+    },
+  },
+  address1: {
+    type: Sequelize.STRING,
+  },
+  address2: {
+    type: Sequelize.STRING,
+  },
+  city: {
+    type: Sequelize.STRING,
+  },
+  state: {
+    type: Sequelize.STRING,
+  },
+  zipCode: {
+    type: Sequelize.INTEGER,
+    validate: {
+      len: [5, 5],
+    },
+  },
+  userType: {
+    type: Sequelize.ENUM('Customer', 'Administrator', 'Engineer'),
+    allowNull: false,
+    defaultValue: 'Customer',
+  },
 });
 
 // instance methods:
