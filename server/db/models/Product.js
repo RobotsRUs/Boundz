@@ -47,4 +47,18 @@ const Product = db.define('product', {
   },
 });
 
+// Class Methods:
+Product.findById = async function (id) {
+  const foundBook = await this.findByPk(id);
+  if (foundBook) {
+    foundBook.dataValues.variations = await this.findAll({
+      where: {
+        title: foundBook.title,
+        id: { [Sequelize.Op.not]: foundBook.id },
+      },
+    });
+  }
+  return foundBook;
+};
+
 module.exports = Product;

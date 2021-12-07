@@ -42,7 +42,7 @@ class SingleProduct extends React.Component {
         summary,
         description,
         format,
-        isbn13,
+        ISBN13,
         imageUrl,
         price,
         length,
@@ -59,7 +59,7 @@ class SingleProduct extends React.Component {
             <div className="right-col">
               <h2 className="title">{title}</h2>
               <h3 className="author">by {author}</h3>
-              <p className="price">{price}</p>
+              <p className="price">{`$${(+price).toFixed(2)}`}</p>
               <p className="description">{description}</p>
               <form className="add-to-cart-form">
                 <div className="format-field">
@@ -100,7 +100,7 @@ class SingleProduct extends React.Component {
               <ul>
                 <li>Publisher: {publisher}</li>
                 <li>Length: {length}</li>
-                <li>ISBN13: {isbn13}</li>
+                <li>ISBN13: {ISBN13}</li>
                 <li>Category: {category}</li>
               </ul>
             </div>
