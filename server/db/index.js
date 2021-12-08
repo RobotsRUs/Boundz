@@ -16,6 +16,7 @@ User.belongsToMany(Order, { through: 'User_Order' });
 Order.belongsToMany(User, { through: 'User_Order' });
 Product.belongsToMany(User, { through: CartItem });
 User.belongsToMany(Product, { through: CartItem });
+CartItem.belongsTo(Product);
 
 // export db and models:
 module.exports = { db, models: { Order, User, Product, CartItem } };

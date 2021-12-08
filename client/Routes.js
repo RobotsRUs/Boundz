@@ -18,21 +18,23 @@ class Routes extends React.Component {
 
     return (
       <div>
-        {isLoggedIn ? (
-          <Switch>
-            <Route path="/home" component={Home} />
-            <Redirect to="/home" />
-          </Switch>
-        ) : (
-          <Switch>
-            <Route path="/" exact component={Login} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
-            <Route exact path="/products" component={AllProducts} />
-            <Route path="/products/:productId" component={SingleProduct} />
-            <Route exact path="/cart" component={Cart} />
-          </Switch>
-        )}
+        <Switch>
+          <Route exact path="/products" component={AllProducts} />
+          <Route path="/products/:productId" component={SingleProduct} />
+          <Route exact path="/cart" component={Cart} />
+          {isLoggedIn ? (
+            <>
+              <Route path="/home" component={Home} />
+              <Redirect to="/home" />
+            </>
+          ) : (
+            <>
+              <Route path="/" exact component={Login} />
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
+            </>
+          )}
+        </Switch>
       </div>
     );
   }

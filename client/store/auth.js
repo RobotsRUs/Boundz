@@ -26,7 +26,14 @@ export const getUser = () => async (dispatch) => {
 export const authenticate =
   (username, password, method) => async (dispatch) => {
     try {
-      const res = await axios.post(`/auth/${method}`, { username, password });
+      const res = await axios.post(`/auth/${method}`, {
+        username,
+        password,
+        firstName: '',
+        lastName: '',
+        email: `${username}@gmail.com`,
+        userType: 'Customer',
+      });
       window.localStorage.setItem(TOKEN, res.data.token);
       dispatch(getUser());
     } catch (authError) {

@@ -3,6 +3,16 @@ const {
   models: { User, CartItem },
 } = require('../db/index');
 
+// GET /api/users/:userId/cart
+router.get('/:userId/cart', async (req, res, next) => {
+  console.log('get me');
+  try {
+    res.json(await CartItem.findByUserId(req.params.userId));
+  } catch (err) {
+    next(err);
+  }
+});
+
 // GET /api/users
 router.get('/', async (req, res, next) => {
   try {
@@ -13,28 +23,19 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// GET /api/users/:userId/cart
-router.get('/users/:userId/cart', async (req, res, next) => {
-  try {
-    res.json(await CartItem.findByUserId(req.params.userId));
-  } catch (err) {
-    next(err);
-  }
-});
-
 // POST /api/users/:userId/cart
-router.post('/users/:userId/cart', async (req, res, next) => {
+router.post('/:userId/cart', async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const { productId, qty } = req.body;
-    res.json(await CartItem.addItem(userId, productId, qty));
+    const { productId, quantity } = req.body;
+    res.json(await CartItem.addItem(userId, productId, quantity));
   } catch (err) {
     next(err);
   }
 });
 
 // PUT /api/users/:userId/cart/:productId
-router.put('/users/:userId/cart/:productId', async (req, res, next) => {
+router.put('/:userId/cart/:productId', async (req, res, next) => {
   try {
     const { userId, productId } = req.params;
     const { qty } = req.body;
@@ -56,7 +57,7 @@ router.put('/users/:userId/cart/:productId', async (req, res, next) => {
 });
 
 // DELETE /api/users/:userId/cart/:productId
-router.delete('/users/:userId/cart/:productId', async (req, res, next) => {
+router.delete('/:userId/cart/:productId', async (req, res, next) => {
   try {
     const { userId, productId } = req.params;
     const removedCartItem = await CartItem.removeItem(userId, productId);
@@ -73,7 +74,7 @@ router.delete('/users/:userId/cart/:productId', async (req, res, next) => {
 });
 
 // DELETE /api/users/:userId/cart
-router.delete('/users/:userId/cart', async (req, res, next) => {
+router.delete('/:userId/cart', async (req, res, next) => {
   try {
     await CartItem.emptyCart(req.params.userId);
     res.json();

@@ -23,23 +23,24 @@ CartItem.findByUserId = async function (userId) {
   }
 };
 
-CartItem.addItem = async function (userId, productId, qty) {
+CartItem.addItem = async function (userId, productId, quantity) {
   try {
     const [cartItem, wasCreated] = await this.findOrCreate({
       where: {
         userId,
         productId,
       },
-      defaults: { qty },
       include: Product,
     });
+    cartItem.quantity += quantity;
+    await cartItem.save();
     return cartItem;
   } catch (err) {
     console.error(err);
   }
 };
 
-CartItem.updateItemQty = async function (userId, productId, qty) {
+CartItem.updateItemQty = async function (userId, productId, quantity) {
   try {
     const cartItem = await this.findOne({
       where: {
@@ -51,7 +52,7 @@ CartItem.updateItemQty = async function (userId, productId, qty) {
     if (!cartItem) {
       return;
     } else {
-      cartItem.qty = qty;
+      cartItem.quantity = quantity;
       await cartItem.save();
       return cartItem;
     }

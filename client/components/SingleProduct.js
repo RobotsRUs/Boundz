@@ -33,8 +33,7 @@ class SingleProduct extends React.Component {
   }
   handleAddToCart(evt) {
     evt.preventDefault();
-    // get user id?
-    const userId = undefined;
+    const userId = this.props.auth.id;
     this.props.addToCart(userId, this.props.book, +this.state.qty);
   }
   render() {
@@ -119,6 +118,7 @@ class SingleProduct extends React.Component {
 
 const mapState = (state) => ({
   book: state.singleProduct,
+  auth: state.auth,
 });
 
 const mapDispatch = (dispatch) => ({

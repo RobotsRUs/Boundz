@@ -9,18 +9,18 @@ const getLocalStorageCart = () => {
   return JSON.parse(localStorage.getItem('cart') || '[]');
 };
 
-const addItemOrUpdateQty = (cart, product, qty) => {
+const addItemOrUpdateQty = (cart, product, quantity) => {
   let alreadyInCart = false;
   const updatedCart = cart.map((cartItem) => {
     if (cartItem.product.id === product.id) {
       alreadyInCart = true;
-      return { ...cartItem, qty: cartItem.qty + qty };
+      return { ...cartItem, quantity: cartItem.quantity + quantity };
     } else {
       return cartItem;
     }
   });
   if (!alreadyInCart) {
-    updatedCart.push({ product, qty });
+    updatedCart.push({ product, quantity });
   }
   return updatedCart;
 };
@@ -33,16 +33,16 @@ const ADD_TO_CART = 'ADD_TO_CART',
   CLEAR_CART = 'CLEAR_CART';
 
 // action creators:
-const _addToCart = (product, qty) => ({
+const _addToCart = (product, quantity) => ({
   type: ADD_TO_CART,
   product,
-  qty,
+  quantity,
 });
 const _removeFromCart = (product) => ({ type: REMOVE_FROM_CART, product });
-const _updateItemQty = (product, qty) => ({
+const _updateItemQty = (product, quantity) => ({
   type: UPDATE_ITEM_QTY,
   product,
-  qty,
+  quantity,
 });
 const _setCart = (cart) => ({ type: SET_CART, cart });
 export const clearCart = () => ({ type: CLEAR_CART });
@@ -62,7 +62,7 @@ export const fetchCart = (userId) => async (dispatch) => {
 };
 
 export const addToCart =
-  (userId, product, qty = 1) =>
+  (userId, product, quantity = 1) =>
   async (dispatch) => {
     try {
       if (userId) {
@@ -70,14 +70,14 @@ export const addToCart =
           `/api/users/${userId}/cart`,
           {
             productId: product.id,
-            qty,
+            quantity,
           }
         );
         dispatch(_addToCart(cartItem));
       } else {
         const currentCart = getLocalStorageCart();
-        setLocalStorageCart(addItemOrUpdateQty(currentCart, product, qty));
-        dispatch(_addToCart(product, qty));
+        setLocalStorageCart(addItemOrUpdateQty(currentCart, product, quantity));
+        dispatch(_addToCart(product, quantity));
       }
     } catch (err) {
       console.log(err);
@@ -101,23 +101,28 @@ export const removeFromCart = (userId, product) => async (dispatch) => {
   }
 };
 
-export const updateItemQty = (userId, product, qty) => async (dispatch) => {
-  try {
-    if (userId) {
-      await axios.put(`/api/users/${userId}/cart/${product.id}`, { qty });
-    } else {
-      const currentCart = getLocalStorageCart();
-      setLocalStorageCart(
-        currentCart.map((cartItem) =>
-          cartItem.product.id === product.id ? { ...cartItem, qty } : cartItem
-        )
-      );
-      dispatch(_updateItemQty(product, qty));
+export const updateItemQty =
+  (userId, product, quantity) => async (dispatch) => {
+    try {
+      if (userId) {
+        await axios.put(`/api/users/${userId}/cart/${product.id}`, {
+          quantity,
+        });
+      } else {
+        const currentCart = getLocalStorageCart();
+        setLocalStorageCart(
+          currentCart.map((cartItem) =>
+            cartItem.product.id === product.id
+              ? { ...cartItem, quantity }
+              : cartItem
+          )
+        );
+        dispatch(_updateItemQty(product, quantity));
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
-  }
-};
+  };
 
 export const emptyCart = (userId) => async (dispatch) => {
   try {
@@ -139,7 +144,7 @@ const cartReducer = (cart = [], action) => {
     case SET_CART:
       return action.cart;
     case ADD_TO_CART:
-      return addItemOrUpdateQty(cart, action.product, action.qty);
+      return addItemOrUpdateQty(cart, action.product, action.quantity);
     case REMOVE_FROM_CART:
       return cart.filter(
         (cartItem) => cartItem.product.id !== action.product.id
@@ -147,7 +152,7 @@ const cartReducer = (cart = [], action) => {
     case UPDATE_ITEM_QTY:
       return cart.map((cartItem) =>
         cartItem.product.id === action.product.id
-          ? { ...cartItem, qty: action.qty }
+          ? { ...cartItem, quantity: action.quantity }
           : cartItem
       );
     case CLEAR_CART:

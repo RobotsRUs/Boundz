@@ -5,9 +5,12 @@ import CartItem from './CartItem';
 
 class Cart extends React.Component {
   componentDidMount() {
-    // Check to see if there is a user id?
-    const userId = undefined;
-    this.props.fetchCart(userId);
+    this.props.fetchCart(this.props.auth.id);
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.auth.id !== prevProps.auth.id) {
+      this.props.fetchCart(this.props.auth.id);
+    }
   }
   componentWillUnmount() {
     this.props.clearCart();
@@ -28,7 +31,7 @@ class Cart extends React.Component {
             {cart.map((cartItem) => (
               <CartItem
                 name={cartItem.product.title}
-                qty={cartItem.qty}
+                qty={cartItem.quantity}
                 price={cartItem.product.price}
                 key={cartItem.product.id}
               />
@@ -44,6 +47,7 @@ class Cart extends React.Component {
 
 const mapState = (state) => ({
   cart: state.cart,
+  auth: state.auth,
 });
 
 const mapDispatch = (dispatch) => ({
