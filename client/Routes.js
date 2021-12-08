@@ -6,6 +6,7 @@ import { Login, Signup } from './components/AuthForm';
 import Home from './components/Home';
 import SingleProduct from './components/SingleProduct';
 import { getUser } from './store';
+import Cart from './components/Cart';
 
 class Routes extends React.Component {
   componentDidMount() {
@@ -29,6 +30,7 @@ class Routes extends React.Component {
             <Route path="/signup" component={Signup} />
             <Route exact path="/products" component={AllProducts} />
             <Route path="/products/:productId" component={SingleProduct} />
+            <Route exact path="/cart" component={Cart} />
           </Switch>
         )}
       </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchProduct, clearProduct } from '../store';
+import { fetchProduct, clearProduct, addToCart } from '../store';
 import Loading from './Loading';
 
 class SingleProduct extends React.Component {
@@ -33,6 +33,9 @@ class SingleProduct extends React.Component {
   }
   handleAddToCart(evt) {
     evt.preventDefault();
+    // get user id?
+    const userId = undefined;
+    this.props.addToCart(userId, this.props.book, +this.state.qty);
   }
   render() {
     if (!this.props.book.id) {
@@ -121,5 +124,7 @@ const mapState = (state) => ({
 const mapDispatch = (dispatch) => ({
   fetchProduct: (productName) => dispatch(fetchProduct(productName)),
   clearProduct: () => dispatch(clearProduct()),
+  addToCart: (userId, product, qty) =>
+    dispatch(addToCart(userId, product, qty)),
 });
 export default connect(mapState, mapDispatch)(SingleProduct);
