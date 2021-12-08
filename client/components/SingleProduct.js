@@ -85,13 +85,19 @@ class SingleProduct extends React.Component {
                   </select>
                 </div>
                 <div className="add-to-cart-field">
-                  <input
+                  <label htmlFor="qty">Qty</label>
+                  <select
                     id="qty"
                     name="qty"
-                    type="number"
-                    value={this.state.qty}
                     onChange={this.handleQtyChange}
-                  />
+                    value={this.state.qty}
+                  >
+                    {[...Array(10).keys()].map((qty) => (
+                      <option key={qty + 1} value={qty + 1}>
+                        {qty + 1}
+                      </option>
+                    ))}
+                  </select>
                   <button id="add-to-cart" onClick={this.handleAddToCart}>
                     ADD TO CART
                   </button>

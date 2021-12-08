@@ -1,10 +1,30 @@
 import React from 'react';
 
-const CartItem = ({ name, price, qty }) => (
+const CartItem = ({
+  qty,
+  name,
+  format,
+  price,
+  updateItemQty,
+  removeFromCart,
+}) => (
   <tr className="cartItem">
-    <td>{qty}</td>
+    <td>
+      <select value={qty} onChange={(evt) => updateItemQty(+evt.target.value)}>
+        {[...Array(10).keys()].map((qty) => (
+          <option key={qty + 1} value={qty + 1}>
+            {qty + 1}
+          </option>
+        ))}
+      </select>
+    </td>
     <td>{name}</td>
-    <td>{price}</td>
+    <td>{format}</td>
+    <td>{`$${(+price).toFixed(2)}`}</td>
+    <td>{`$${(+price * qty).toFixed(2)}`}</td>
+    <td>
+      <button onClick={() => removeFromCart()}>X</button>
+    </td>
   </tr>
 );
 

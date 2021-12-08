@@ -38,11 +38,11 @@ router.post('/:userId/cart', async (req, res, next) => {
 router.put('/:userId/cart/:productId', async (req, res, next) => {
   try {
     const { userId, productId } = req.params;
-    const { qty } = req.body;
+    const { quantity } = req.body;
     const updatedCartItem = await CartItem.updateItemQty(
       userId,
       productId,
-      qty
+      quantity
     );
     if (!updatedCartItem) {
       const error = new Error('Item not found in cart');

@@ -27,7 +27,7 @@ const addItemOrUpdateQty = (cart, product, quantity) => {
 
 // action types:
 const ADD_TO_CART = 'ADD_TO_CART',
-  REMOVE_FROM_CART = 'ADD_TO_CART',
+  REMOVE_FROM_CART = 'REMOVE_FROM_CART',
   UPDATE_ITEM_QTY = 'UPDATE_ITEM_QTY',
   SET_CART = 'SET_CART',
   CLEAR_CART = 'CLEAR_CART';
@@ -117,8 +117,8 @@ export const updateItemQty =
               : cartItem
           )
         );
-        dispatch(_updateItemQty(product, quantity));
       }
+      dispatch(_updateItemQty(product, quantity));
     } catch (err) {
       console.log(err);
     }
