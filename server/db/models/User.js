@@ -54,6 +54,7 @@ const User = db.define('user', {
       len: [5, 5],
     },
   },
+  // o: refactor to boolean isAdmin
   userType: {
     type: Sequelize.ENUM('Customer', 'Administrator', 'Engineer'),
     allowNull: false,

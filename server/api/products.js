@@ -18,6 +18,7 @@ router.get('/:productId', async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.productId);
     if (!product) {
+      // o: why not just send it directly to next()
       const err = new Error('Not found');
       err.status = 404;
       throw err;

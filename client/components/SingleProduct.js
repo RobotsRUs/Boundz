@@ -4,6 +4,7 @@ import { fetchProduct, clearProduct, addToCart } from '../store';
 import Loading from './Loading';
 
 class SingleProduct extends React.Component {
+  // o: this could probably use line breaks
   constructor(props) {
     super(props);
     this.state = {
@@ -14,28 +15,35 @@ class SingleProduct extends React.Component {
     this.handleQtyChange = this.handleQtyChange.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
   }
+
   componentDidMount() {
     this.props.fetchProduct(this.props.match.params.productId);
   }
+
   componentDidUpdate(prevProps) {
     if (this.props.book.id !== prevProps.book.id) {
       this.setState({ format: this.props.book.id });
     }
   }
+
   componentWillUnmount() {
     this.props.clearProduct();
   }
+
   handleFormatChange(evt) {
     this.props.fetchProduct(evt.target.value);
   }
+  
   handleQtyChange(evt) {
     this.setState({ qty: evt.target.value });
   }
+
   handleAddToCart(evt) {
     evt.preventDefault();
     const userId = this.props.auth.id;
     this.props.addToCart(userId, this.props.book, +this.state.qty);
   }
+
   render() {
     if (!this.props.book.id) {
       return <Loading />;
@@ -76,6 +84,7 @@ class SingleProduct extends React.Component {
                     onChange={this.handleFormatChange}
                   >
                     <option value={id}>{format}</option>
+                    {/* o: is there a case where this is needed? */}
                     {variations &&
                       variations.map((variation) => (
                         <option key={variation.id} value={variation.id}>
@@ -92,6 +101,7 @@ class SingleProduct extends React.Component {
                     onChange={this.handleQtyChange}
                     value={this.state.qty}
                   >
+                    {/* o: refactor into its own function */}
                     {[...Array(10).keys()].map((qty) => (
                       <option key={qty + 1} value={qty + 1}>
                         {qty + 1}

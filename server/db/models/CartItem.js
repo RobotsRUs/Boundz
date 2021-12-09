@@ -50,6 +50,7 @@ CartItem.updateItemQty = async function (userId, productId, quantity) {
       include: Product,
     });
     if (!cartItem) {
+      // o: avoid using try/catch in module method
       return;
     } else {
       cartItem.quantity = quantity;
@@ -71,6 +72,7 @@ CartItem.removeItem = async function (userId, productId) {
       include: Product,
     });
     if (!cartItem) {
+      // o: avoid using try/catch in module method
       return;
     } else {
       await cartItem.destroy();

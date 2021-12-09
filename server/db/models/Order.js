@@ -10,6 +10,7 @@ const Order = db.define('order', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  // o: refactor to change to date/time
   date: {
     type: Sequelize.STRING,
     validate: {

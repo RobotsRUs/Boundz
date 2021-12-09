@@ -7,6 +7,7 @@ const {
 router.get('/:userId/cart', async (req, res, next) => {
   console.log('get me');
   try {
+    // o: what if you don't find the user?
     res.json(await CartItem.findByUserId(req.params.userId));
   } catch (err) {
     next(err);
@@ -45,6 +46,7 @@ router.put('/:userId/cart/:productId', async (req, res, next) => {
       quantity
     );
     if (!updatedCartItem) {
+      // o: why not send right to next()
       const error = new Error('Item not found in cart');
       error.status = 404;
       throw error;
@@ -62,6 +64,7 @@ router.delete('/:userId/cart/:productId', async (req, res, next) => {
     const { userId, productId } = req.params;
     const removedCartItem = await CartItem.removeItem(userId, productId);
     if (!removedCartItem) {
+      // o: why not send right to next()
       const error = new Error('Item not found in cart');
       error.status = 404;
       throw error;

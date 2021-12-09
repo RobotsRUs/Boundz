@@ -11,6 +11,7 @@ const CartItem = ({
   <tr className="cartItem">
     <td>
       <select value={qty} onChange={(evt) => updateItemQty(+evt.target.value)}>
+        {/* o: refactor into its own function */}
         {[...Array(10).keys()].map((qty) => (
           <option key={qty + 1} value={qty + 1}>
             {qty + 1}
