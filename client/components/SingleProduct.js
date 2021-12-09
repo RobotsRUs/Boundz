@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchProduct, clearProduct } from '../store';
+import { fetchProduct, clearProduct, addToCart } from '../store';
 import Loading from './Loading';
 
 class SingleProduct extends React.Component {
@@ -33,6 +33,8 @@ class SingleProduct extends React.Component {
   }
   handleAddToCart(evt) {
     evt.preventDefault();
+    const userId = this.props.auth.id;
+    this.props.addToCart(userId, this.props.book, +this.state.qty);
   }
   render() {
     if (!this.props.book.id) {
@@ -83,13 +85,19 @@ class SingleProduct extends React.Component {
                   </select>
                 </div>
                 <div className="add-to-cart-field">
-                  <input
+                  <label htmlFor="qty">Qty</label>
+                  <select
                     id="qty"
                     name="qty"
-                    type="number"
-                    value={this.state.qty}
                     onChange={this.handleQtyChange}
-                  />
+                    value={this.state.qty}
+                  >
+                    {[...Array(10).keys()].map((qty) => (
+                      <option key={qty + 1} value={qty + 1}>
+                        {qty + 1}
+                      </option>
+                    ))}
+                  </select>
                   <button id="add-to-cart" onClick={this.handleAddToCart}>
                     ADD TO CART
                   </button>
@@ -116,10 +124,13 @@ class SingleProduct extends React.Component {
 
 const mapState = (state) => ({
   book: state.singleProduct,
+  auth: state.auth,
 });
 
 const mapDispatch = (dispatch) => ({
   fetchProduct: (productName) => dispatch(fetchProduct(productName)),
   clearProduct: () => dispatch(clearProduct()),
+  addToCart: (userId, product, qty) =>
+    dispatch(addToCart(userId, product, qty)),
 });
 export default connect(mapState, mapDispatch)(SingleProduct);
