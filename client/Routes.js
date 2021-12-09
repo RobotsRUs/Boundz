@@ -7,7 +7,7 @@ import Home from './components/Home';
 import SingleProduct from './components/SingleProduct';
 import { getUser } from './store';
 import Cart from './components/Cart';
-import Checkout from './components/Checkout';
+import Checkout from './components/checkout/Checkout';
 
 class Routes extends React.Component {
   componentDidMount() {

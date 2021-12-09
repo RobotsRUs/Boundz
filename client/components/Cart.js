@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   clearCart,
   emptyCart,
@@ -81,7 +82,9 @@ class Cart extends React.Component {
             <button onClick={() => this.props.emptyCart(this.props.auth.id)}>
               Empty Cart
             </button>
-            <button>Checkout</button>
+            <Link to="/checkout">
+              <button>Checkout</button>
+            </Link>
           </div>
         </div>
       );
