@@ -6,12 +6,28 @@ const TOKEN = 'token';
 // action types:
 
 const SET_AUTH = 'SET_AUTH';
+const CREATE_NEW_USER = 'CREATE_NEW_USER';
 
 // action creators:
 
 const setAuth = (auth) => ({ type: SET_AUTH, auth });
 
+const _createUser = (newUser) => ({
+  type: CREATE_NEW_USER,
+  newUser,
+});
+
 // thunk creators:
+export const createUser = (newUser) => async (dispatch) => {
+  try {
+    const { data } = await axios.post('/api/users', newUser);
+    console.log('This is the thunk data: ', data);
+    dispatch(_createUser(data));
+    // window.location.reload();
+  } catch (error) {
+    console.error('There was an error creating new user: ', error);
+  }
+};
 
 export const getUser = () => async (dispatch) => {
   const token = window.localStorage.getItem(TOKEN);
@@ -56,6 +72,8 @@ export default (state = {}, action) => {
   switch (action.type) {
     case SET_AUTH:
       return action.auth;
+    case CREATE_NEW_USER:
+      return action.newUser;
     default:
       return state;
   }

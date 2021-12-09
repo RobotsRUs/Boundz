@@ -2,12 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 import AllProducts from './components/AllProducts';
-import { Login, Signup } from './components/AuthForm';
+import { Login } from './components/AuthForm';
 import Home from './components/Home';
 import SingleProduct from './components/SingleProduct';
 import { getUser } from './store';
 import Cart from './components/Cart';
 import Checkout from './components/checkout/Checkout';
+import RegistrationForm from './components/RegistrationForm';
 
 class Routes extends React.Component {
   componentDidMount() {
@@ -33,7 +34,7 @@ class Routes extends React.Component {
             <>
               <Route path="/" exact component={Login} />
               <Route path="/login" component={Login} />
-              <Route path="/signup" component={Signup} />
+              <Route path="/signup" component={RegistrationForm} />
             </>
           )}
         </Switch>

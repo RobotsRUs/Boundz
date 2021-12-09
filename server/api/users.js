@@ -23,6 +23,17 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// POST /api/users
+router.post('/', async (req, res, next) => {
+  try {
+    const createdUser = await User.create(req.body);
+    console.log('This is req.body: ', req.body);
+    res.status(201).send(createdUser);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // POST /api/users/:userId/cart
 router.post('/:userId/cart', async (req, res, next) => {
   try {
