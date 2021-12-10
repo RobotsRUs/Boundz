@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { authenticate } from '../store';
-import { createUser } from '../store';
+import { updateUser } from '../store';
 
-export class RegistrationForm extends React.Component {
+export class UpdateUserInfo extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -12,6 +12,12 @@ export class RegistrationForm extends React.Component {
       username: '',
       password: '',
       email: '',
+      phoneNumber: '',
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      zipCode: '',
       userType: 'Customer',
     };
 
@@ -27,7 +33,7 @@ export class RegistrationForm extends React.Component {
 
   handleSubmitEvent(event) {
     event.preventDefault();
-    this.props.createUser({
+    this.props.updateUser({
       ...this.state,
     });
     this.setState({
@@ -36,6 +42,12 @@ export class RegistrationForm extends React.Component {
       username: '',
       password: '',
       email: '',
+      phoneNumber: '',
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      zipCode: '',
       userType: '',
     });
   }
@@ -87,6 +99,34 @@ export class RegistrationForm extends React.Component {
               name="email"
               onChange={this.handleChangeEvent}
             />
+            <label>Phone Number</label>
+            <input
+              type="tel"
+              name="phoneNumber"
+              onChange={this.handleChangeEvent}
+            />
+            <label>Address 1</label>
+            <input
+              type="text"
+              name="address1"
+              onChange={this.handleChangeEvent}
+            />
+            <label>Address 2</label>
+            <input
+              type="text"
+              name="address2"
+              onChange={this.handleChangeEvent}
+            />
+            <label>City</label>
+            <input type="text" name="city" onChange={this.handleChangeEvent} />
+            <label>State</label>
+            <input type="text" name="state" onChange={this.handleChangeEvent} />
+            <label>Zip Code</label>
+            <input
+              type="number"
+              name="zipCode"
+              onChange={this.handleChangeEvent}
+            />
             <label>User Account Type</label>
             <select
               name="userType"
@@ -99,7 +139,7 @@ export class RegistrationForm extends React.Component {
           </div>
           <br />
           <button type="submit" onClick={this.handleSubmitEvent}>
-            Complete Registration
+            Update Info
           </button>
         </form>
       </div>
@@ -107,10 +147,10 @@ export class RegistrationForm extends React.Component {
   }
 }
 
-const mapRegistration = (state) => {
+const mapUpdate = (state) => {
   return {
-    name: 'registration',
-    displayName: 'Register Here',
+    name: 'update',
+    displayName: 'Update Info',
     error: state.auth.error,
   };
 };
@@ -125,6 +165,4 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-export default connect(mapRegistration, { createUser, mapDispatch })(
-  RegistrationForm
-);
+export default connect(mapUpdate, { updateUser, mapDispatch })(UpdateUserInfo);

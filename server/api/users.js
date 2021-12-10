@@ -45,6 +45,17 @@ router.post('/:userId/cart', async (req, res, next) => {
   }
 });
 
+// PUT /api/users
+router.put('/:userId', async (req, res, next) => {
+  try {
+    const userBeingUpdated = await User.findByPk(req.params.userId);
+    const wasUpdated = await userBeingUpdated.update(req.body);
+    res.send(wasUpdated);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // PUT /api/users/:userId/cart/:productId
 router.put('/:userId/cart/:productId', async (req, res, next) => {
   try {

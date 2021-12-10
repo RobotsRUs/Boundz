@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { noExtendLeft } from 'sequelize/dist/lib/operators';
 import history from '../history';
 
 const TOKEN = 'token';
@@ -7,6 +8,7 @@ const TOKEN = 'token';
 
 const SET_AUTH = 'SET_AUTH';
 const CREATE_NEW_USER = 'CREATE_NEW_USER';
+const UPDATE_USER = 'UPDATE_USER';
 
 // action creators:
 
@@ -17,13 +19,17 @@ const _createUser = (newUser) => ({
   newUser,
 });
 
+const _updateUser = (userBeingUpdated) => ({
+  type: UPDATE_USER,
+  userBeingUpdated,
+});
+
 // thunk creators:
 export const createUser = (newUser) => async (dispatch) => {
   try {
     const { data } = await axios.post('/api/users', newUser);
     console.log('This is the thunk data: ', data);
     dispatch(_createUser(data));
-    // window.location.reload();
   } catch (error) {
     console.error('There was an error creating new user: ', error);
   }
@@ -36,6 +42,15 @@ export const getUser = () => async (dispatch) => {
       headers: { authorization: token },
     });
     return dispatch(setAuth(user));
+  }
+};
+
+export const updateUser = (user) => async (dispatch) => {
+  try {
+    const { data } = await axios.put(`/api/users/${user.userId}`, user);
+    dispatch(_updateUser(user));
+  } catch (error) {
+    console.error('Error updating current user', error);
   }
 };
 
@@ -74,6 +89,8 @@ export default (state = {}, action) => {
       return action.auth;
     case CREATE_NEW_USER:
       return action.newUser;
+    case UPDATE_USER:
+      return action.userBeingUpdated;
     default:
       return state;
   }
