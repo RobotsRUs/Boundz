@@ -49,7 +49,7 @@ const User = db.define('user', {
     type: Sequelize.STRING,
   },
   zipCode: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     validate: {
       len: [5, 5],
     },
