@@ -4,6 +4,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
+import { formatUSD, getCartTotal } from '../utils';
 
 export default function Review({ cart, checkoutInfo }) {
   const {
@@ -51,14 +52,7 @@ export default function Review({ cart, checkoutInfo }) {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            $
-            {cart
-              .reduce(
-                (sum, cartItem) =>
-                  sum + cartItem.product.price * cartItem.quantity,
-                0
-              )
-              .toFixed(2)}
+            {formatUSD(getCartTotal(cart))}
           </Typography>
         </ListItem>
       </List>
