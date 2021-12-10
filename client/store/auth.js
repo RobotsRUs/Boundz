@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { clearLocalStorageCart, getLocalStorageCart } from '.';
 import history from '../history';
 
 const TOKEN = 'token';
@@ -19,6 +20,19 @@ export const getUser = () => async (dispatch) => {
     const { data: user } = await axios.get('/auth/user', {
       headers: { authorization: token },
     });
+    // merge guest cart (if there is one) into users cart
+    const guestCart = getLocalStorageCart();
+    if (guestCart.length) {
+      clearLocalStorageCart();
+      await Promise.all(
+        guestCart.map((cartItem) =>
+          axios.post(`/api/users/${user.id}/cart`, {
+            productId: cartItem.product.id,
+            quantity: cartItem.quantity,
+          })
+        )
+      );
+    }
     return dispatch(setAuth(user));
   }
 };

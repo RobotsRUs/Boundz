@@ -1,12 +1,18 @@
 import axios from 'axios';
 
 // helpers:
+const CART = 'cart';
+
 const setLocalStorageCart = (cart) => {
-  localStorage.setItem('cart', JSON.stringify(cart));
+  window.localStorage.setItem(CART, JSON.stringify(cart));
 };
 
-const getLocalStorageCart = () => {
-  return JSON.parse(localStorage.getItem('cart') || '[]');
+export const getLocalStorageCart = () => {
+  return JSON.parse(window.localStorage.getItem(CART) || '[]');
+};
+
+export const clearLocalStorageCart = () => {
+  window.localStorage.removeItem(CART);
 };
 
 const addItemOrUpdateQty = (cart, product, quantity) => {
@@ -130,7 +136,7 @@ export const emptyCart = (userId) => async (dispatch) => {
       await axios.delete(`/api/users/${userId}/cart`);
       dispatch(clearCart());
     } else {
-      localStorage.removeItem('cart');
+      clearLocalStorageCart();
       dispatch(clearCart());
     }
   } catch (err) {
