@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchProduct, clearProduct, addToCart } from '../store';
 import Loading from './Loading';
+import { formatUSD } from './utils';
 
 class SingleProduct extends React.Component {
   constructor(props) {
@@ -64,7 +65,7 @@ class SingleProduct extends React.Component {
             <div className="right-col">
               <h2 className="title">{title}</h2>
               <h3 className="author">by {author}</h3>
-              <p className="price">{`$${(+price).toFixed(2)}`}</p>
+              <p className="price">{formatUSD(price)}</p>
               <p className="description">{description}</p>
               <form className="add-to-cart-form">
                 <div className="format-field">
