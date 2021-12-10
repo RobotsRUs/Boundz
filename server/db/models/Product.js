@@ -25,11 +25,9 @@ const Product = db.define('product', {
   ISBN13: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true,
   },
   imageUrl: {
     type: Sequelize.STRING,
-    //defaultValue: find default photo for public folder
   },
   price: {
     type: Sequelize.INTEGER,

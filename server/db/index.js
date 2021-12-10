@@ -7,8 +7,6 @@ const Product = require('./models/Product');
 const LineItem = require('./models/LineItem');
 
 // associate models:
-User.belongsToMany(Product, { through: 'Cart' });
-Product.belongsToMany(User, { through: 'Cart' });
 Order.belongsToMany(Product, { through: LineItem });
 Product.belongsToMany(Order, { through: LineItem });
 LineItem.belongsTo(Product);

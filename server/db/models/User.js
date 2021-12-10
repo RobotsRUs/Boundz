@@ -54,10 +54,9 @@ const User = db.define('user', {
       len: [5, 5],
     },
   },
-  userType: {
-    type: Sequelize.ENUM('Customer', 'Administrator', 'Engineer'),
-    allowNull: false,
-    defaultValue: 'Customer',
+  isAdmin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
   },
 });
 
