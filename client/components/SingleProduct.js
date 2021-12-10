@@ -2,7 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchProduct, clearProduct, addToCart } from '../store';
 import Loading from './Loading';
-import { formatUSD } from './utils';
+import { formatUSD, qtyArray } from './utils';
+import NativeSelect from '@mui/material/NativeSelect';
+import { FormControl, InputLabel, Grid, Stack } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 class SingleProduct extends React.Component {
   constructor(props) {
@@ -57,55 +61,62 @@ class SingleProduct extends React.Component {
         variations,
       } = this.props.book;
       return (
-        <div className="single-product">
-          <div className="product-header">
-            <div className="left-col">
+        <Grid>
+          <Grid container>
+            <Grid item>
               <img className="cover-art" src={imageUrl} />
-            </div>
-            <div className="right-col">
+            </Grid>
+            <Grid item>
               <h2 className="title">{title}</h2>
               <h3 className="author">by {author}</h3>
               <p className="price">{formatUSD(price)}</p>
               <p className="description">{description}</p>
               <form className="add-to-cart-form">
-                <div className="format-field">
-                  <label htmlFor="format">Format</label>
-                  <select
+                <FormControl>
+                  <InputLabel htmlFor="format">Format</InputLabel>
+                  <NativeSelect
                     id="format"
                     name="format"
                     value={this.state.format}
+                    label="Format"
                     onChange={this.handleFormatChange}
                   >
                     <option value={id}>{format}</option>
-                    {variations &&
-                      variations.map((variation) => (
-                        <option key={variation.id} value={variation.id}>
-                          {variation.format}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                <div className="add-to-cart-field">
-                  <label htmlFor="qty">Qty</label>
-                  <select
-                    id="qty"
-                    name="qty"
-                    onChange={this.handleQtyChange}
-                    value={this.state.qty}
-                  >
-                    {[...Array(10).keys()].map((qty) => (
-                      <option key={qty + 1} value={qty + 1}>
-                        {qty + 1}
+                    {variations.map((variation) => (
+                      <option key={variation.id} value={variation.id}>
+                        {variation.format}
                       </option>
                     ))}
-                  </select>
-                  <button id="add-to-cart" onClick={this.handleAddToCart}>
-                    ADD TO CART
-                  </button>
+                  </NativeSelect>
+                </FormControl>
+                <FormControl>
+                  <InputLabel htmlFor="qty">Qty</InputLabel>
+                  <NativeSelect
+                    id="qty"
+                    name="qty"
+                    value={this.state.qty}
+                    label="Format"
+                    onChange={this.handleQtyChange}
+                  >
+                    {qtyArray().map((qty) => (
+                      <option key={qty} value={qty}>
+                        {qty}
+                      </option>
+                    ))}
+                  </NativeSelect>
+                </FormControl>
+                <div>
+                  <IconButton
+                    color="primary"
+                    aria-label="add to shopping cart"
+                    onClick={this.handleAddToCart}
+                  >
+                    <AddShoppingCartIcon />
+                  </IconButton>
                 </div>
               </form>
-            </div>
-          </div>
+            </Grid>
+          </Grid>
           <div className="product-body">
             <p className="summary">{summary}</p>
             <div className="product-details">
@@ -117,7 +128,7 @@ class SingleProduct extends React.Component {
               </ul>
             </div>
           </div>
-        </div>
+        </Grid>
       );
     }
   }

@@ -15,3 +15,16 @@ export const getCartTotal = (cart) =>
     (sum, cartItem) => sum + cartItem.product.price * cartItem.quantity,
     0
   );
+
+/**
+ * Get array of quantities
+ * @param {Number} maxQty - default 10
+ * @return {Number[]} Array of quantiies from 1 to maxQuantity
+ */
+export const qtyArray = (maxQty = 10) => {
+  const qtyArray = new Array(maxQty);
+  for (let i = 0; i < qtyArray.length; i++) {
+    qtyArray[i] = i + 1;
+  }
+  return qtyArray;
+};
