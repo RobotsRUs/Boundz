@@ -93,7 +93,7 @@ router.post('/:userId/checkout', async (req, res, next) => {
       const order = await Order.create({
         ...checkoutInfo,
         fulfilled: true,
-        date: new Date().toString,
+        date: new Date(),
       });
       await Promise.all(
         cart.map((item) =>
