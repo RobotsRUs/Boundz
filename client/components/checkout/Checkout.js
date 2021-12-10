@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -13,10 +14,12 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import creditCardValidateExpiry from 'credit-card-expiry-validator';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
-import { fetchCart, clearCart } from '../../store';
+import { fetchCart, clearCart, emptyCart } from '../../store';
+import { CircularProgress } from '@mui/material';
 
 function Copyright() {
   return (
@@ -40,30 +43,125 @@ class Checkout extends React.Component {
     super(props);
     this.state = {
       activeStep: 0,
+      checkoutInfo: {},
     };
     this.setActiveStep = this.setActiveStep.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  validate(step) {
+    const {
+      firstName,
+      lastName,
+      address1,
+      city,
+      state,
+      zipCode,
+      expDate,
+      cardName,
+      cardNumber,
+      cvv,
+    } = this.state.checkoutInfo;
+    switch (step) {
+      case 0:
+        return (
+          !!firstName &&
+          !!lastName &&
+          !!address1 &&
+          !!city &&
+          !!state &&
+          /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zipCode)
+        );
+      case 1:
+        return (
+          cardName &&
+          cardNumber &&
+          cvv &&
+          expDate &&
+          !creditCardValidateExpiry.isExpiryInvalid(expDate)
+        );
+      default:
+        return true;
+    }
   }
 
   setActiveStep(activeStep) {
     this.setState({ activeStep });
+    if (activeStep === steps.length) {
+      this.submitOrder();
+    }
+  }
+
+  async submitOrder() {
+    const checkoutInfo = { ...this.state.checkoutInfo };
+    delete checkoutInfo.id;
+    const { data: confirmation } = await axios.post(
+      `/api/users/${this.props.auth.id || 'guest'}/checkout`,
+      { checkoutInfo, cart: this.props.cart }
+    );
+    this.props.emptyCart();
+    this.setState({ confirmation: confirmation });
   }
 
   componentDidMount() {
     this.props.fetchCart(this.props.auth.id);
+    this.setState({
+      checkoutInfo: {
+        ...this.props.auth,
+        cardName: `${this.props.auth.firstName || ''} ${
+          this.props.auth.lastName || ''
+        }`,
+      },
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.auth.id !== this.props.auth.id) {
+      this.setState({
+        checkoutInfo: {
+          ...this.props.auth,
+          cardName: `${this.props.auth.firstName} ${this.props.auth.lastName}`,
+        },
+      });
+    }
   }
 
   componentWillUnmount() {
     this.props.clearCart();
   }
 
+  handleChange(evt) {
+    this.setState({
+      checkoutInfo: {
+        ...this.state.checkoutInfo,
+        [evt.target.name]: evt.target.value,
+      },
+    });
+  }
+
   getStepContent(step) {
     switch (step) {
       case 0:
-        return <AddressForm />;
+        return (
+          <AddressForm
+            checkoutInfo={this.state.checkoutInfo}
+            handleChange={this.handleChange}
+          />
+        );
       case 1:
-        return <PaymentForm />;
+        return (
+          <PaymentForm
+            checkoutInfo={this.state.checkoutInfo}
+            handleChange={this.handleChange}
+          />
+        );
       case 2:
-        return <Review cart={this.props.cart} />;
+        return (
+          <Review
+            cart={this.props.cart}
+            checkoutInfo={this.state.checkoutInfo}
+          />
+        );
       default:
         throw new Error('Unknown step');
     }
@@ -73,10 +171,6 @@ class Checkout extends React.Component {
     const { activeStep } = this.state;
     const setActiveStep = this.setActiveStep;
     const handleNext = () => {
-      if (activeStep + 1 === steps.length) {
-        alert('you submitted');
-        // need to dispatch submit order
-      }
       setActiveStep(activeStep + 1);
     };
 
@@ -104,16 +198,21 @@ class Checkout extends React.Component {
             </Stepper>
             <React.Fragment>
               {activeStep === steps.length ? (
-                <React.Fragment>
-                  <Typography variant="h5" gutterBottom>
-                    Thank you for your order.
-                  </Typography>
-                  <Typography variant="subtitle1">
-                    Your order number is #2001539. We have emailed your order
-                    confirmation, and will send you an update when your order
-                    has shipped.
-                  </Typography>
-                </React.Fragment>
+                this.state.confirmation ? (
+                  <React.Fragment>
+                    <Typography variant="h5" gutterBottom>
+                      Thank you for your order.
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      Your order number is {this.state.confirmation}. We will
+                      send you an update when your order has shipped.
+                    </Typography>
+                  </React.Fragment>
+                ) : (
+                  <Container align="center">
+                    <CircularProgress />
+                  </Container>
+                )
               ) : (
                 <React.Fragment>
                   {this.getStepContent(activeStep)}
@@ -125,6 +224,7 @@ class Checkout extends React.Component {
                     )}
 
                     <Button
+                      disabled={!this.validate(activeStep)}
                       variant="contained"
                       onClick={handleNext}
                       sx={{ mt: 3, ml: 1 }}
@@ -151,6 +251,7 @@ const mapState = (state) => ({
 const mapDispatch = (dispatch) => ({
   fetchCart: (userId) => dispatch(fetchCart(userId)),
   clearCart: () => dispatch(clearCart()),
+  emptyCart: () => dispatch(emptyCart()),
 });
 
 export default connect(mapState, mapDispatch)(Checkout);
