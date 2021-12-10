@@ -5,15 +5,31 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
 
-const addresses = ['1 MUI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
-const payments = [
-  { name: 'Card type', detail: 'Visa' },
-  { name: 'Card holder', detail: 'Mr John Smith' },
-  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
-  { name: 'Expiry date', detail: '04/2024' },
-];
+export default function Review({ cart, checkoutInfo }) {
+  const {
+    firstName,
+    lastName,
+    address1,
+    address2,
+    city,
+    state,
+    zipCode,
+    cardName,
+    cardNumber,
+    expDate,
+  } = checkoutInfo;
 
-export default function Review({ cart }) {
+  const addresses = [address1, address2, city, state, zipCode];
+
+  const payments = [
+    { name: 'Card holder', detail: cardName },
+    {
+      name: 'Card number',
+      detail: `xxxx-xxxx-xxxx-${cardNumber.slice(cardNumber.length - 4)}`,
+    },
+    { name: 'Expiry date', detail: expDate },
+  ];
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -51,7 +67,9 @@ export default function Review({ cart }) {
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             Shipping
           </Typography>
-          <Typography gutterBottom>John Smith</Typography>
+          <Typography gutterBottom>
+            {firstName} {lastName}
+          </Typography>
           <Typography gutterBottom>{addresses.join(', ')}</Typography>
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>

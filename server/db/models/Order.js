@@ -4,17 +4,19 @@ const db = require('../db');
 const Order = db.define('order', {
   firstName: {
     type: Sequelize.STRING,
-    allowNull: false,
   },
   lastName: {
     type: Sequelize.STRING,
-    allowNull: false,
   },
   date: {
     type: Sequelize.STRING,
     validate: {
       isDate: true,
     },
+  },
+  fulfilled: {
+    type: Sequelize.BOOLEAN,
+    default: false,
   },
   address1: {
     type: Sequelize.STRING,
