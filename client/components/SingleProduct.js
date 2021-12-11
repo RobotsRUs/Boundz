@@ -37,24 +37,30 @@ class SingleProduct extends React.Component {
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
   }
+
   componentDidMount() {
     this.props.fetchProduct(this.props.match.params.productId);
   }
+
   componentDidUpdate(prevProps) {
     if (this.props.book.id !== prevProps.book.id) {
       this.setState({ format: this.props.book.id });
     }
   }
+
   componentWillUnmount() {
     this.props.clearProduct();
     clearTimeout(this.alertsTimeout);
   }
+
   handleFormatChange(evt) {
     this.props.fetchProduct(evt.target.value);
   }
+
   handleQtyChange(evt) {
     this.setState({ qty: evt.target.value });
   }
+
   handleAddToCart(evt) {
     evt.preventDefault();
     const userId = this.props.auth.id;
@@ -64,9 +70,11 @@ class SingleProduct extends React.Component {
     });
     this.alertsTimeout = setTimeout(() => this.setState({ alert: '' }), 5000);
   }
+
   handleTabChange(evt, newTab) {
     this.setState({ tab: newTab });
   }
+
   render() {
     if (!this.props.book.id) {
       return <Loading />;
@@ -240,4 +248,5 @@ const mapDispatch = (dispatch) => ({
   addToCart: (userId, product, qty) =>
     dispatch(addToCart(userId, product, qty)),
 });
+
 export default connect(mapState, mapDispatch)(SingleProduct);
