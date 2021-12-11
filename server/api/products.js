@@ -6,7 +6,10 @@ const {
 // GET /api/products
 router.get('/', async (req, res, next) => {
   try {
-    const allProducts = await Product.findAll();
+    const allProducts = await Product.findAll({
+      Attributes: ['title'],
+      distinct: true,
+    });
     res.send(allProducts);
   } catch (err) {
     next(err);

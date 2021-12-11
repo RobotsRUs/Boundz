@@ -10,7 +10,6 @@ const Product = require('../server/db/models/Product');
 const USER_DATA = JSON.parse(
   fs.readFileSync(path.join(__dirname, '../', 'bin', 'userData.json'), 'utf8')
 );
-
 const PRODUCT_DATA = JSON.parse(
   fs.readFileSync(
     path.join(__dirname, '../', 'bin', 'productData.json'),
