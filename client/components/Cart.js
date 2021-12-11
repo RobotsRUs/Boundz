@@ -41,11 +41,10 @@ class Cart extends React.Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Qty</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Format</TableCell>
+                <TableCell>Product</TableCell>
                 <TableCell>Price</TableCell>
-                <TableCell colSpan={3}>Subtotal</TableCell>
+                <TableCell>Qty</TableCell>
+                <TableCell>Subtotal</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -78,7 +77,6 @@ class Cart extends React.Component {
                 <TableCell>Total:</TableCell>
                 <TableCell colSpan={2} />
                 <TableCell>{formatUSD(getCartTotal(cart))}</TableCell>
-                <TableCell />
               </TableRow>
             </TableFooter>
           </Table>

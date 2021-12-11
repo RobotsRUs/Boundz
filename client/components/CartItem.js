@@ -1,6 +1,17 @@
 import React from 'react';
 import { formatUSD } from './utils';
-import { TableRow, TableCell, Grid, Typography } from '@mui/material';
+import {
+  TableRow,
+  TableCell,
+  Grid,
+  Typography,
+  IconButton,
+  NativeSelect,
+  Stack,
+  Box,
+} from '@mui/material';
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+import { qtyArray } from './utils';
 
 const CartItem = ({
   qty,
@@ -25,18 +36,24 @@ const CartItem = ({
     </TableCell>
     <TableCell>{formatUSD(price)}</TableCell>
     <TableCell>
-      <select value={qty} onChange={(evt) => updateItemQty(+evt.target.value)}>
-        {[...Array(10).keys()].map((qty) => (
-          <option key={qty + 1} value={qty + 1}>
-            {qty + 1}
+      <NativeSelect
+        id="qty"
+        name="qty"
+        value={qty}
+        label="Format"
+        onChange={(evt) => updateItemQty(+evt.target.value)}
+      >
+        {qtyArray().map((qty) => (
+          <option key={qty} value={qty}>
+            {qty}
           </option>
         ))}
-      </select>
+      </NativeSelect>
+      <IconButton onClick={() => removeFromCart()}>
+        <RemoveShoppingCartIcon />
+      </IconButton>
     </TableCell>
     <TableCell>{formatUSD(price * qty)}</TableCell>
-    <TableCell>
-      <button onClick={() => removeFromCart()}>X</button>
-    </TableCell>
   </TableRow>
 );
 
