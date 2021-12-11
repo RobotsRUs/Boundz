@@ -6,19 +6,22 @@ import Loading from './Loading';
 import { formatUSD, qtyArray } from './utils';
 import NativeSelect from '@mui/material/NativeSelect';
 import {
+  Alert,
+  Button,
+  Collapse,
   FormControl,
   InputLabel,
   Grid,
   Stack,
   Typography,
   Container,
+  Tabs,
+  Tab,
+  Box,
+  IconButton,
 } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
+import { Link } from 'react-router-dom';
 
 class SingleProduct extends React.Component {
   constructor(props) {
@@ -27,6 +30,7 @@ class SingleProduct extends React.Component {
       format: 0,
       qty: 1,
       tab: 0,
+      alert: '',
     };
     this.handleFormatChange = this.handleFormatChange.bind(this);
     this.handleQtyChange = this.handleQtyChange.bind(this);
@@ -43,6 +47,7 @@ class SingleProduct extends React.Component {
   }
   componentWillUnmount() {
     this.props.clearProduct();
+    clearTimeout(this.alertsTimeout);
   }
   handleFormatChange(evt) {
     this.props.fetchProduct(evt.target.value);
@@ -54,6 +59,10 @@ class SingleProduct extends React.Component {
     evt.preventDefault();
     const userId = this.props.auth.id;
     this.props.addToCart(userId, this.props.book, +this.state.qty);
+    this.setState({
+      alert: `"${this.props.book.title}" has been added to your cart`,
+    });
+    this.alertsTimeout = setTimeout(() => this.setState({ alert: '' }), 5000);
   }
   handleTabChange(evt, newTab) {
     this.setState({ tab: newTab });
@@ -78,7 +87,18 @@ class SingleProduct extends React.Component {
         variations,
       } = this.props.book;
       return (
-        <>
+        <Stack sx={{ width: '100%' }} spacing={2}>
+          <Collapse in={!!this.state.alert}>
+            <Alert
+              action={
+                <Link to="/cart">
+                  <Button size="small">VIEW CART</Button>
+                </Link>
+              }
+            >
+              {this.state.alert}
+            </Alert>
+          </Collapse>
           <Grid
             container
             spacing={{ xs: 2, md: 3 }}
@@ -175,7 +195,7 @@ class SingleProduct extends React.Component {
               </ul>
             </TabPanel>
           </Box>
-        </>
+        </Stack>
       );
     }
   }
