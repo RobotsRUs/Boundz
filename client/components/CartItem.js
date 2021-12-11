@@ -12,10 +12,12 @@ import {
 } from '@mui/material';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import { qtyArray } from './utils';
+import { Link } from 'react-router-dom';
 
 const CartItem = ({
   qty,
   name,
+  id,
   imageUrl,
   format,
   price,
@@ -24,36 +26,44 @@ const CartItem = ({
 }) => (
   <TableRow>
     <TableCell>
-      <Grid container spacing={1}>
-        <Grid item maxWidth={75}>
-          <img src={imageUrl} width="100%" />
-        </Grid>
-        <Grid item>
-          <Typography variant="subtitle1">{name}</Typography>
-          <Typography variant="subtitle2">{format}</Typography>
-        </Grid>
-      </Grid>
+      <Stack direction="row" spacing={1}>
+        <Box maxWidth={75}>
+          <Link to={`/products/${id}`}>
+            <img src={imageUrl} width="100%" />
+          </Link>
+        </Box>
+        <Stack spacing={1}>
+          <Link to={`/products/${id}`}>
+            <Typography sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}>
+              {name}
+            </Typography>
+          </Link>
+          <Typography sx={{ fontSize: '0.8rem' }}>Format: {format}</Typography>
+        </Stack>
+      </Stack>
     </TableCell>
     <TableCell>{formatUSD(price)}</TableCell>
     <TableCell>
-      <NativeSelect
-        id="qty"
-        name="qty"
-        value={qty}
-        label="Format"
-        onChange={(evt) => updateItemQty(+evt.target.value)}
-      >
-        {qtyArray().map((qty) => (
-          <option key={qty} value={qty}>
-            {qty}
-          </option>
-        ))}
-      </NativeSelect>
-      <IconButton onClick={() => removeFromCart()}>
-        <RemoveShoppingCartIcon />
-      </IconButton>
+      <Stack direction="row" spacing={1}>
+        <NativeSelect
+          id="qty"
+          name="qty"
+          value={qty}
+          label="Format"
+          onChange={(evt) => updateItemQty(+evt.target.value)}
+        >
+          {qtyArray().map((qty) => (
+            <option key={qty} value={qty}>
+              {qty}
+            </option>
+          ))}
+        </NativeSelect>
+        <IconButton onClick={() => removeFromCart()}>
+          <RemoveShoppingCartIcon />
+        </IconButton>
+      </Stack>
     </TableCell>
-    <TableCell>{formatUSD(price * qty)}</TableCell>
+    <TableCell align="right">{formatUSD(price * qty)}</TableCell>
   </TableRow>
 );
 
