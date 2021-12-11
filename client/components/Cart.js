@@ -153,7 +153,10 @@ class Cart extends React.Component {
                 Cancel
               </Button>
               <Button
-                onClick={() => this.props.emptyCart(this.props.auth.id)}
+                onClick={() => {
+                  this.props.emptyCart(this.props.auth.id);
+                  this.showDialogue(false);
+                }}
                 autoFocus
               >
                 Yes
