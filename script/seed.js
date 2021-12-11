@@ -36,7 +36,7 @@ async function runSeed() {
   try {
     await seed();
   } catch (err) {
-    console.error(err.parent.code);
+    console.error(err);
     process.exitCode = 1;
   } finally {
     console.log('closing db connection');
