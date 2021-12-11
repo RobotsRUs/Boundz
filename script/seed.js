@@ -10,7 +10,6 @@ const Product = require('../server/db/models/Product');
 const USER_DATA = JSON.parse(
   fs.readFileSync(path.join(__dirname, '../', 'bin', 'userData.json'), 'utf8')
 );
-
 const PRODUCT_DATA = JSON.parse(
   fs.readFileSync(
     path.join(__dirname, '../', 'bin', 'productData.json'),
@@ -37,7 +36,7 @@ async function runSeed() {
   try {
     await seed();
   } catch (err) {
-    console.error(err);
+    console.error(err.parent.code);
     process.exitCode = 1;
   } finally {
     console.log('closing db connection');

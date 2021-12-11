@@ -11,7 +11,8 @@ const Product = db.define('product', {
     allowNull: false,
   },
   description: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
+    allowNull: false,
   },
   summary: {
     type: Sequelize.TEXT,
@@ -27,14 +28,14 @@ const Product = db.define('product', {
     allowNull: false,
   },
   imageUrl: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
   },
   price: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
   length: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     allowNull: false,
   },
   publisher: {
