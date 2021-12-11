@@ -10,6 +10,15 @@ import {
 } from '../store';
 import CartItem from './CartItem';
 import { formatUSD, getCartTotal } from './utils';
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  TableFooter,
+} from '@mui/material';
 
 class Cart extends React.Component {
   calculateTotal() {}
@@ -28,18 +37,18 @@ class Cart extends React.Component {
     const { cart } = this.props;
     if (cart.length) {
       return (
-        <div className="cart-container">
-          <table className="cart-table">
-            <thead>
-              <tr>
-                <td>Qty</td>
-                <td>Name</td>
-                <td>Format</td>
-                <td>Price</td>
-                <td>Subtotal</td>
-              </tr>
-            </thead>
-            <tbody>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Qty</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Format</TableCell>
+                <TableCell>Price</TableCell>
+                <TableCell colSpan={3}>Subtotal</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {cart.map((cartItem) => (
                 <CartItem
                   key={cartItem.product.id}
@@ -47,6 +56,7 @@ class Cart extends React.Component {
                   qty={cartItem.quantity}
                   price={cartItem.product.price}
                   format={cartItem.product.format}
+                  imageUrl={cartItem.product.imageUrl}
                   updateItemQty={(qty) =>
                     this.props.updateItemQty(
                       this.props.auth.id,
@@ -62,14 +72,16 @@ class Cart extends React.Component {
                   }
                 />
               ))}
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>Total:</td>
-                <td>{formatUSD(getCartTotal(cart))}</td>
-              </tr>
-            </tfoot>
-          </table>
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell>Total:</TableCell>
+                <TableCell colSpan={2} />
+                <TableCell>{formatUSD(getCartTotal(cart))}</TableCell>
+                <TableCell />
+              </TableRow>
+            </TableFooter>
+          </Table>
           <div className="cart-foot">
             <button onClick={() => this.props.emptyCart(this.props.auth.id)}>
               Empty Cart
@@ -78,7 +90,7 @@ class Cart extends React.Component {
               <button>Checkout</button>
             </Link>
           </div>
-        </div>
+        </TableContainer>
       );
     } else {
       return <div>Your cart is empty!</div>;
