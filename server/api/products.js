@@ -20,12 +20,12 @@ router.get('/:productId', async (req, res, next) => {
     if (!product) {
       const err = new Error('Not found');
       err.status = 404;
-      throw err;
+      next(err);
     } else {
       res.json(product);
     }
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 });
 
