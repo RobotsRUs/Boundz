@@ -64,21 +64,20 @@ class SingleProduct extends React.Component {
         <Grid>
           <Grid container>
             <Grid item>
-              <img className="cover-art" src={imageUrl} />
+              <img className='cover-art' src={imageUrl} />
             </Grid>
             <Grid item>
-              <h2 className="title">{title}</h2>
-              <h3 className="author">by {author}</h3>
-              <p className="price">{formatUSD(price)}</p>
-              <p className="description">{description}</p>
-              <form className="add-to-cart-form">
+              <h2 className='title'>{title}</h2>
+              <h3 className='author'>by {author}</h3>
+              <p className='price'>{formatUSD(price)}</p>
+              <form className='add-to-cart-form'>
                 <FormControl>
-                  <InputLabel htmlFor="format">Format</InputLabel>
+                  <InputLabel htmlFor='format'>Format</InputLabel>
                   <NativeSelect
-                    id="format"
-                    name="format"
+                    id='format'
+                    name='format'
                     value={this.state.format}
-                    label="Format"
+                    label='Format'
                     onChange={this.handleFormatChange}
                   >
                     <option value={id}>{format}</option>
@@ -90,12 +89,12 @@ class SingleProduct extends React.Component {
                   </NativeSelect>
                 </FormControl>
                 <FormControl>
-                  <InputLabel htmlFor="qty">Qty</InputLabel>
+                  <InputLabel htmlFor='qty'>Qty</InputLabel>
                   <NativeSelect
-                    id="qty"
-                    name="qty"
+                    id='qty'
+                    name='qty'
                     value={this.state.qty}
-                    label="Format"
+                    label='Format'
                     onChange={this.handleQtyChange}
                   >
                     {qtyArray().map((qty) => (
@@ -107,8 +106,8 @@ class SingleProduct extends React.Component {
                 </FormControl>
                 <div>
                   <IconButton
-                    color="primary"
-                    aria-label="add to shopping cart"
+                    color='primary'
+                    aria-label='add to shopping cart'
                     onClick={this.handleAddToCart}
                   >
                     <AddShoppingCartIcon />
@@ -117,9 +116,9 @@ class SingleProduct extends React.Component {
               </form>
             </Grid>
           </Grid>
-          <div className="product-body">
-            <p className="summary">{summary}</p>
-            <div className="product-details">
+          <div className='product-body'>
+            <p className='summary'>{summary}</p>
+            <div className='product-details'>
               <ul>
                 <li>Publisher: {publisher}</li>
                 <li>Length: {length}</li>
