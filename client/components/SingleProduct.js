@@ -7,6 +7,7 @@ import { formatUSD, qtyArray } from './utils';
 import NativeSelect from '@mui/material/NativeSelect';
 import {
   Alert,
+  Box,
   Button,
   Collapse,
   FormControl,
@@ -14,10 +15,8 @@ import {
   Grid,
   Stack,
   Typography,
-  Container,
   Tabs,
   Tab,
-  Box,
   IconButton,
 } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -95,7 +94,7 @@ class SingleProduct extends React.Component {
         variations,
       } = this.props.book;
       return (
-        <Stack sx={{ width: '100%' }} spacing={2}>
+        <Stack margin={2} style={{ gap: 20 }}>
           <Collapse in={!!this.state.alert}>
             <Alert
               action={
@@ -112,10 +111,14 @@ class SingleProduct extends React.Component {
             spacing={{ xs: 2, md: 3 }}
             columns={{ xs: 4, sm: 8, md: 12 }}
           >
-            <Grid item>
-              <img className="cover-art" src={imageUrl} />
+            <Grid item xs={4} sm={1}>
+              <img
+                className="cover-art"
+                src={imageUrl}
+                style={{ maxWidth: '100%' }}
+              />
             </Grid>
-            <Grid item>
+            <Grid item xs sm>
               <Grid container direction="column" spacing={4}>
                 <Grid item container direction="column" spacing={1}>
                   <Grid item>
