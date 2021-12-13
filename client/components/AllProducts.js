@@ -13,7 +13,7 @@ class AllProducts extends React.Component {
     const allProducts = this.props.products;
     return (
       <div>
-        <h1> Book Inventory</h1>
+        <h1> Boundz Bookz </h1>
         <hr />
         {allProducts.map((product) => (
           <div key={product.id}>

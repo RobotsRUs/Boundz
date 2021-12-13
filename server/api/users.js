@@ -22,6 +22,16 @@ router.get('/:userId/cart', async (req, res, next) => {
   }
 });
 
+// POST /api/users/
+router.post('/', async (req, res, next) => {
+  try {
+    const createdUser = await User.create(req.body);
+    res.status(201).json(createdUser);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // POST /api/users/:userId/cart
 router.post('/:userId/cart', async (req, res, next) => {
   try {
@@ -30,6 +40,17 @@ router.post('/:userId/cart', async (req, res, next) => {
     res.json(await LineItem.addItem(userId, productId, quantity));
   } catch (err) {
     next(err);
+  }
+});
+
+// PUT /api/users
+router.put('/:userId', async (req, res, next) => {
+  try {
+    const userBeingUpdated = await User.findByPk(req.params.userId);
+    const wasUpdated = await userBeingUpdated.update(req.body);
+    res.send(wasUpdated);
+  } catch (error) {
+    next(error);
   }
 });
 
