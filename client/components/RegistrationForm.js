@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { authenticate } from '../store';
-import { createUser } from '../store';
+import { authenticate, createUser } from '../store';
 
 export class RegistrationForm extends React.Component {
   constructor() {
@@ -125,6 +124,8 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-export default connect(mapRegistration, { createUser, mapDispatch })(
-  RegistrationForm
-);
+export default connect(mapRegistration, {
+  mapDispatch,
+  authenticate,
+  createUser,
+})(RegistrationForm);

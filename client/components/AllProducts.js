@@ -22,7 +22,7 @@ class AllProducts extends React.Component {
                 <h2>{product.title}</h2>
               </Link>
               <h3>by: {product.author}</h3>
-              <h3>$ {product.price / 100}</h3>
+              <h3>$ {product.price}</h3>
               <h3>{product.description}</h3>
               <h3>{product.imageUrl}</h3>
             </div>

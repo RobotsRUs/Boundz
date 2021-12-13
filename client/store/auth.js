@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { noExtendLeft } from 'sequelize/dist/lib/operators';
 import history from '../history';
 
 const TOKEN = 'token';
@@ -29,6 +28,7 @@ export const createUser = (newUser) => async (dispatch) => {
   try {
     const { data } = await axios.post('/api/users', newUser);
     console.log('This is the thunk data: ', data);
+    //window.localStorage.setItem(TOKEN, res.data.token)
     dispatch(_createUser(data));
   } catch (error) {
     console.error('There was an error creating new user: ', error);
@@ -54,23 +54,15 @@ export const updateUser = (user) => async (dispatch) => {
   }
 };
 
-export const authenticate =
-  (username, password, method) => async (dispatch) => {
-    try {
-      const res = await axios.post(`/auth/${method}`, {
-        username,
-        password,
-        firstName: '',
-        lastName: '',
-        email: `${username}@gmail.com`,
-        userType: 'Customer',
-      });
-      window.localStorage.setItem(TOKEN, res.data.token);
-      dispatch(getUser());
-    } catch (authError) {
-      return dispatch(setAuth({ error: authError }));
-    }
-  };
+export const authenticate = (userObject, method) => async (dispatch) => {
+  try {
+    const res = await axios.post(`/auth/${method}`, userObject);
+    window.localStorage.setItem(TOKEN, res.data.token);
+    dispatch(getUser());
+  } catch (authError) {
+    return dispatch(setAuth({ error: authError }));
+  }
+};
 
 export const logout = () => {
   window.localStorage.removeItem(TOKEN);
@@ -82,7 +74,6 @@ export const logout = () => {
 };
 
 // reducer:
-
 export default (state = {}, action) => {
   switch (action.type) {
     case SET_AUTH:

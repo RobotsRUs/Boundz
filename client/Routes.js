@@ -9,6 +9,10 @@ import { getUser } from './store';
 import Cart from './components/Cart';
 import Checkout from './components/checkout/Checkout';
 import RegistrationForm from './components/RegistrationForm';
+import NewUserRegistrationForm from './components/NewUserRegistrationForm';
+import UpdateUserInfo from './components/UpdateUserInfo';
+import UserDashboard from './components/UserDashboard';
+import AdminDashboard from './components/AdminDashboard';
 
 class Routes extends React.Component {
   componentDidMount() {
@@ -34,7 +38,7 @@ class Routes extends React.Component {
             <>
               <Route path="/" exact component={Login} />
               <Route path="/login" component={Login} />
-              <Route path="/signup" component={RegistrationForm} />
+              <Route path="/signup" component={NewUserRegistrationForm} />
             </>
           )}
         </Switch>

@@ -1,7 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { authenticate } from '../store';
-import { updateUser } from '../store';
+import { authenticate, updateUser } from '../store';
+
+import {
+  Typography,
+  AppBar,
+  TextField,
+  Grid,
+  Button,
+  FormControl,
+  FormLabel,
+  FormControlLabel,
+  RadioGroup,
+  Radio,
+} from '@mui/material';
 
 export class UpdateUserInfo extends React.Component {
   constructor() {
@@ -48,100 +60,227 @@ export class UpdateUserInfo extends React.Component {
       city: '',
       state: '',
       zipCode: '',
-      userType: '',
+      userType: 'Customer',
     });
   }
+
+  handleChange = (name) => (event) => {
+    this.setState({ [name]: event.target.value });
+  };
 
   render() {
     console.log('this is this.state', this.state);
 
     return (
       <div>
-        <h1>
-          WELCOME&nbsp;||&nbsp;BIENVENIDO&nbsp;||&nbsp;BIENVENUE&nbsp;||&nbsp;ДОБРО
-          ПОЖАЛОВАТЬ(DOBRO POZHALOVAT')&nbsp;||&nbsp;ברוך הבא&nbsp;||&nbsp;أهلا
-          بك&nbsp;||&nbsp;BIENVENI&nbsp;||&nbsp;환영하다&nbsp;||&nbsp;WELKOM&nbsp;||&nbsp;ようこそ
-        </h1>
-        <h1>to the Boundz</h1>
-        <h1>
-          FAMILY&nbsp;||&nbsp;FAMILIA&nbsp;||&nbsp;FAMILLE&nbsp;||&nbsp;СЕМЬЯ(SEM'YA)&nbsp;||&nbsp;מִשׁפָּחָה&nbsp;||&nbsp;أسرة&nbsp;||&nbsp;FANMI&nbsp;||&nbsp;가족&nbsp;||&nbsp;FAMILIE&nbsp;||&nbsp;家族
-        </h1>
-
-        <form onSubmit={this.handleSubmitEvent}>
+        <AppBar position="sticky">
           <div>
-            <label>First Name</label>
-            <input
-              type="text"
-              name="firstName"
-              onChange={this.handleChangeEvent}
-            />
-            <label>Last Name</label>
-            <input
-              type="text"
-              name="lastName"
-              onChange={this.handleChangeEvent}
-            />
-            <label>Username</label>
-            <input
-              type="text"
-              name="username"
-              onChange={this.handleChangeEvent}
-            />
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              onChange={this.handleChangeEvent}
-            />
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              onChange={this.handleChangeEvent}
-            />
-            <label>Phone Number</label>
-            <input
-              type="tel"
-              name="phoneNumber"
-              onChange={this.handleChangeEvent}
-            />
-            <label>Address 1</label>
-            <input
-              type="text"
-              name="address1"
-              onChange={this.handleChangeEvent}
-            />
-            <label>Address 2</label>
-            <input
-              type="text"
-              name="address2"
-              onChange={this.handleChangeEvent}
-            />
-            <label>City</label>
-            <input type="text" name="city" onChange={this.handleChangeEvent} />
-            <label>State</label>
-            <input type="text" name="state" onChange={this.handleChangeEvent} />
-            <label>Zip Code</label>
-            <input
-              type="number"
-              name="zipCode"
-              onChange={this.handleChangeEvent}
-            />
-            <label>User Account Type</label>
-            <select
-              name="userType"
-              defaultValue={this.state.userType}
-              onChange={this.handleChangeEvent}
-            >
-              <option>Customer</option>
-              <option>Administrator</option>
-            </select>
+            <h1 className="centered">
+              WELCOME👐BIENVENIDO👐BIENVENUE👐ДОБРО ПОЖАЛОВАТЬ👐أهلا بك
+              👐BIENVENI👐환영하다👐WELKOM👐ようこそ👐ברוך הבא
+            </h1>
+            <h1 className="centered">to the Boundz</h1>
+            <h1 className="centered">
+              FAMILY👐FAMILIA👐FAMILLE👐СЕМЬЯ👐أسرة👐FANMI👐가족👐FAMILIE👐家族👐מִשׁפָּחָה
+            </h1>
           </div>
+        </AppBar>
+        <br />
+
+        <Typography variant="h4">Update Account Info</Typography>
+        <br />
+
+        <Grid container spacing={3} onSubmit={this.handleSubmitEvent}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              required
+              id="firstName"
+              name="firstName"
+              fullWidth
+              type="text"
+              label="First Name"
+              variant="outlined"
+              onChange={this.handleChangeEvent}
+            />
+          </Grid>
           <br />
-          <button type="submit" onClick={this.handleSubmitEvent}>
-            Update Info
-          </button>
-        </form>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              required
+              id="lastName"
+              name="lastName"
+              fullWidth
+              type="text"
+              label="Last Name"
+              variant="outlined"
+              onChange={this.handleChangeEvent}
+            />
+          </Grid>
+          <br />
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              required
+              id="userName"
+              name="userName"
+              fullWidth
+              type="text"
+              label="Username"
+              variant="outlined"
+              onChange={this.handleChangeEvent}
+            />
+          </Grid>
+          <br />
+
+          {/* <Grid item xs={12}></Grid>
+          <br /> */}
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              required
+              id="password"
+              name="password"
+              fullWidth
+              type="password"
+              label="Password"
+              variant="outlined"
+              onChange={this.handleChangeEvent}
+            />
+          </Grid>
+          <br />
+
+          <Grid item xs={18}>
+            <TextField
+              required
+              id="email"
+              name="email"
+              fullWidth
+              type="email"
+              label="Primary Email Address"
+              variant="outlined"
+              onChange={this.handleChangeEvent}
+            />
+          </Grid>
+          <br />
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              required
+              id="tel"
+              name="tel"
+              fullWidth
+              type="tel"
+              label="Phone Number"
+              variant="outlined"
+              onChange={this.handleChangeEvent}
+            />
+          </Grid>
+          <br />
+
+          <Grid item xs={12}>
+            <TextField
+              required
+              id="address1"
+              name="address1"
+              fullWidth
+              type="text"
+              label="Street Address"
+              variant="outlined"
+              onChange={this.handleChangeEvent}
+            />
+          </Grid>
+          <br />
+
+          <Grid item xs={12}>
+            <TextField
+              required
+              id="address2"
+              name="address2"
+              fullWidth
+              type="text"
+              label="Street Address"
+              variant="outlined"
+              onChange={this.handleChangeEvent}
+            />
+          </Grid>
+          <br />
+
+          <Grid item xs={4}>
+            <TextField
+              required
+              id="city"
+              name="city"
+              fullWidth
+              type="text"
+              label="City"
+              variant="outlined"
+              onChange={this.handleChangeEvent}
+            />
+          </Grid>
+          <br />
+
+          <Grid item xs={4}>
+            <TextField
+              required
+              id="state"
+              name="state"
+              fullWidth
+              type="text"
+              label="State"
+              variant="outlined"
+              onChange={this.handleChangeEvent}
+            />
+          </Grid>
+          <br />
+
+          <Grid item xs={4}>
+            <TextField
+              required
+              id="zipCode"
+              name="zipCode"
+              fullWidth
+              type="text"
+              label="Zip Code"
+              variant="outlined"
+              onChange={this.handleChangeEvent}
+            />
+          </Grid>
+          <br />
+
+          <Grid item xs={6}>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Account Type</FormLabel>
+              <RadioGroup
+                aria-label="accountType"
+                defaultValue="Customer"
+                name="radio-buttons-group"
+              >
+                <FormControlLabel
+                  value="Customer"
+                  control={<Radio />}
+                  label="Customer"
+                />
+                <FormControlLabel
+                  value="Administrator"
+                  control={<Radio />}
+                  label="Administrator"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+          <br />
+
+          <Grid item xs={9} /*justifyContent="flex-end"*/>
+            <Button
+              color="primary"
+              variant="outlined"
+              onSubmit={this.handleSubmit}
+            >
+              Update Account Information
+            </Button>
+          </Grid>
+        </Grid>
       </div>
     );
   }
