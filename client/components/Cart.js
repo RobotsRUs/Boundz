@@ -9,6 +9,7 @@ import {
   updateItemQty,
 } from '../store';
 import CartItem from './CartItem';
+import { formatUSD, getCartTotal } from './utils';
 
 class Cart extends React.Component {
   calculateTotal() {}
@@ -65,16 +66,7 @@ class Cart extends React.Component {
             <tfoot>
               <tr>
                 <td>Total:</td>
-                <td>
-                  $
-                  {cart
-                    .reduce(
-                      (sum, cartItem) =>
-                        sum + cartItem.product.price * cartItem.quantity,
-                      0
-                    )
-                    .toFixed(2)}
-                </td>
+                <td>{formatUSD(getCartTotal(cart))}</td>
               </tr>
             </tfoot>
           </table>

@@ -23,6 +23,7 @@
   "dependencies": {
     "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
+    "credit-card-expiry-validator": "^0.0.3",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
@@ -38,6 +39,7 @@
     "@babel/runtime": "^7.16.3",
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.2.1",
     "@mui/material": "^5.2.3",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.5",
     "axios-mock-adapter": "^1.20.0",

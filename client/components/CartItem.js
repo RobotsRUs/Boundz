@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatUSD } from './utils';
 
 const CartItem = ({
   qty,
@@ -20,8 +21,8 @@ const CartItem = ({
     </td>
     <td>{name}</td>
     <td>{format}</td>
-    <td>{`$${(+price).toFixed(2)}`}</td>
-    <td>{`$${(+price * qty).toFixed(2)}`}</td>
+    <td>{formatUSD(price)}</td>
+    <td>{formatUSD(price * qty)}</td>
     <td>
       <button onClick={() => removeFromCart()}>X</button>
     </td>

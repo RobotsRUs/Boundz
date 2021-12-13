@@ -32,7 +32,7 @@ const Product = db.define('product', {
     //defaultValue: find default photo for public folder
   },
   price: {
-    type: Sequelize.DECIMAL,
+    type: Sequelize.INTEGER,
     allowNull: false,
   },
   length: {
