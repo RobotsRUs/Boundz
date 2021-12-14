@@ -5,23 +5,23 @@ import { logout } from '../store';
 
 const Navbar = ({ handleClick, isLoggedIn }) => (
   <div>
-    <h1>GS-App-Template</h1>
+    <h1>Boundz Bookstore</h1>
     <nav>
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
-          <Link to='/home'>Home</Link>
-          <a href='#' onClick={handleClick}>
+          <Link to="/home">Home</Link>
+          <a href="#" onClick={handleClick}>
             Logout
           </a>
         </div>
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
-          <Link to='/login'>Login</Link>
-          <Link to='/signup'>Sign Up</Link>
-          <Link to='/products'>Browse</Link>
-          <Link to='/cart'>Cart</Link>
+          <Link to="/login">Login</Link>
+          <Link to="/signup">Sign Up</Link>
+          <Link to="/products">Browse</Link>
+          <Link to="/cart">Cart</Link>
         </div>
       )}
     </nav>
