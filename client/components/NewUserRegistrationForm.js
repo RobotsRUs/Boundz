@@ -115,7 +115,12 @@ export class NewUserRegistrationForm extends React.Component {
             <br />
 
             <Grid item container xs={6} sm={12} justifyContent="flex-end">
-              <Button color="primary" variant="outlined" type="sumbit">
+              <Button
+                color="primary"
+                variant="outlined"
+                type="sumbit"
+                onClick={this.handleSubmitEvent}
+              >
                 Complete Registration
               </Button>
             </Grid>

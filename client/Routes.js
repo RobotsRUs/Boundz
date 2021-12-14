@@ -8,7 +8,6 @@ import SingleProduct from './components/SingleProduct';
 import { getUser } from './store';
 import Cart from './components/Cart';
 import Checkout from './components/checkout/Checkout';
-import RegistrationForm from './components/RegistrationForm';
 import NewUserRegistrationForm from './components/NewUserRegistrationForm';
 import UpdateUserInfo from './components/UpdateUserInfo';
 import UserDashboard from './components/UserDashboard';

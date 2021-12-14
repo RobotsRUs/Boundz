@@ -71,6 +71,7 @@ export const updateUser = (user) => async (dispatch) => {
 export const authenticate = (userObject, method) => async (dispatch) => {
   try {
     const res = await axios.post(`/auth/${method}`, userObject);
+    console.log(res);
     window.localStorage.setItem(TOKEN, res.data.token);
     dispatch(getUser());
   } catch (authError) {
