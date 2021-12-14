@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const sequelize = require('sequelize');
 const {
   models: { Product },
 } = require('../db');
@@ -7,7 +8,7 @@ const {
 router.get('/', async (req, res, next) => {
   try {
     const allProducts = await Product.findAll({
-      Attributes: ['title'],
+      group: ['id', 'title'],
       distinct: true,
     });
     res.send(allProducts);
