@@ -1,8 +1,11 @@
 const router = require('express').Router();
 const sequelize = require('sequelize');
+const multer = require('multer');
 const {
   models: { Product },
 } = require('../db');
+
+const upload = multer({ dest: './public/images/book-covers/' });
 
 // GET /api/products
 router.get('/', async (req, res, next) => {
@@ -34,11 +37,14 @@ router.get('/:productId', async (req, res, next) => {
 });
 
 // POST /api/products
-router.post('/', async (req, res, next) => {
+router.post('/', upload.single('imageFile'), async (req, res, next) => {
   try {
+    if (req.file) {
+      req.body.imageUrl = `/images/book-covers/${req.file.filename}`;
+    }
     const variations = [];
     // Create variations
-    for (let book of req.body.variations) {
+    for (let book of JSON.parse(req.body.variations)) {
       const newBook = await Product.create({ ...req.body, ...book });
       variations.push(newBook);
     }
@@ -52,50 +58,58 @@ router.post('/', async (req, res, next) => {
 });
 
 // PUT /api/products
-router.put('/:productId', async (req, res, next) => {
-  try {
-    const product = await Product.findById(req.params.productId);
-    if (!product) {
-      const err = new Error('Not found');
-      err.status = 404;
-      throw err;
-    } else {
-      const newVariations = [];
+router.put(
+  '/:productId',
+  upload.single('imageFile'),
+  async (req, res, next) => {
+    try {
+      if (req.file) {
+        req.body.imageUrl = `/images/book-covers/${req.file.filename}`;
+      }
+      const product = await Product.findById(req.params.productId);
+      if (!product) {
+        const err = new Error('Not found');
+        err.status = 404;
+        throw err;
+      } else {
+        const variations = JSON.parse(req.body.variations);
+        const newVariations = [];
 
-      // Destroy removed variations
-      await product.removeOldVariations(req.body.variations);
+        // Destroy removed variations
+        await product.removeOldVariations(variations);
 
-      // Update variations
-      for (let book of req.body.variations) {
-        // Get product if it exists already
-        const foundBook = book.id ? await Product.findByPk(book.id) : null;
-        if (foundBook) {
-          for (let key in req.body) {
-            foundBook[key] = req.body[key];
+        // Update variations
+        for (let book of variations) {
+          // Get product if it exists already
+          const foundBook = book.id ? await Product.findByPk(book.id) : null;
+          if (foundBook) {
+            for (let key in req.body) {
+              foundBook[key] = req.body[key];
+            }
+            for (let key in book) {
+              foundBook[key] = book[key];
+            }
+            await foundBook.save();
+            newVariations.push(foundBook);
+          } else {
+            const newBook = await Product.create({ ...req.body, ...book });
+            newVariations.push(newBook);
           }
-          for (let key in book) {
-            foundBook[key] = book[key];
-          }
-          await foundBook.save();
-          newVariations.push(foundBook);
-        } else {
-          const newBook = await Product.create({ ...req.body, ...book });
-          newVariations.push(newBook);
         }
       }
-    }
 
-    // Update found product
-    for (let key in req.body) {
-      product[key] = req.body[key];
-    }
+      // Update found product
+      for (let key in req.body) {
+        product[key] = req.body[key];
+      }
 
-    await product.save();
-    res.json(product);
-  } catch (error) {
-    next(error);
+      await product.save();
+      res.json(product);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 // DELETE /api/products
 router.delete('/:productId', async (req, res, next) => {

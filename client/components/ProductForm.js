@@ -39,6 +39,7 @@ class ProductForm extends React.Component {
       publisher: '',
       category: '',
       variations: [],
+      imageFile: {},
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleImageSelect = this.handleImageSelect.bind(this);
@@ -120,7 +121,6 @@ class ProductForm extends React.Component {
     if (idx === null) {
       this.setState({ [name]: value });
     } else {
-      console.log(name, value);
       this.setState({
         variations: this.state.variations.map((variation, i) =>
           i === +idx ? { ...variation, [name]: value } : variation
@@ -148,6 +148,7 @@ class ProductForm extends React.Component {
     if (evt.target.files[0]) {
       const imageUrl = URL.createObjectURL(evt.target.files[0]);
       this.setState({ imageUrl });
+      this.setState({ imageFile: evt.target.files[0] });
     }
   }
 
@@ -159,15 +160,47 @@ class ProductForm extends React.Component {
       variation.price = +variation.price.slice(1) * 100;
       delete variation.id;
     }
-    if (this.props.book.id) {
-      await axios.put(`/api/products/${this.props.book.id}`, product);
-    } else {
-      await axios.post('/api/products', product);
+    // MAKIN A MESS:
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    const fd = new FormData();
+    for (let key in product) {
+      const val = Array.isArray(product[key])
+        ? JSON.stringify(product[key])
+        : product[key];
+      fd.append(key, val);
     }
+    // NEW:
+    if (this.props.book.id) {
+      const { data: updatedProduct } = await axios.put(
+        `/api/products/${this.props.book.id}`,
+        fd,
+        config
+      );
+      this.props.history.push(`/products/${updatedProduct.id}`);
+    } else {
+      const { data: newProduct } = await axios.post(
+        '/api/products',
+        fd,
+        config
+      );
+      this.props.history.push(`/products/${newProduct.id}`);
+    }
+
+    /* OLD:
+    if (this.props.book.id) {
+      await axios.put(`/api/products/${this.props.book.id}`, product, header);
+    } else {
+      await axios.post('/api/products', product, header);
+    }*/
   }
 
   async handleDelete() {
     await axios.delete(`/api/products/${this.props.book.id}`);
+    this.props.history.push('/products');
   }
 
   render() {
