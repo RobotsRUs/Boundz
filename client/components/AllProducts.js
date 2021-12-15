@@ -78,7 +78,7 @@ class AllProducts extends React.Component {
                 </Link>
                 <ExpandMore
                   expand={this.state.expanded}
-                  onClick={this.handleExpandClick}
+                  onClick={this.handleExpandedClick}
                   aria-expanded={this.state.expanded}
                   aria-label="show more"
                 >
