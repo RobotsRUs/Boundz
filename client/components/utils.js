@@ -28,3 +28,13 @@ export const qtyArray = (maxQty = 10) => {
   }
   return qtyArray;
 };
+
+/**
+ * Get array of available book formats
+ * @param {String[]} usedFormats Array of all used format types
+ * @return {String[]} Array of available format types
+ */
+export const unusedFormats = (usedFormats) => {
+  const formats = ['hardcover', 'paperback', 'ebook'];
+  return formats.filter((format) => !usedFormats.includes(format));
+};
