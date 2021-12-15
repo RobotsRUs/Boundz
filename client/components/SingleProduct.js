@@ -20,6 +20,7 @@ import {
   IconButton,
 } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
 
 class SingleProduct extends React.Component {
@@ -122,7 +123,14 @@ class SingleProduct extends React.Component {
               <Grid container direction="column" spacing={4}>
                 <Grid item container direction="column" spacing={1}>
                   <Grid item>
-                    <Typography variant="h4">{title}</Typography>
+                    <Typography variant="h4">
+                      {title}{' '}
+                      {this.props.auth.isAdmin && (
+                        <Link to={`/products/${this.props.book.id}/edit`}>
+                          <EditIcon />
+                        </Link>
+                      )}
+                    </Typography>
                     <Typography variant="subtitle">by {author}</Typography>
                     <Typography variant="subtitle2" color="text.secondary">
                       {formatUSD(price)}

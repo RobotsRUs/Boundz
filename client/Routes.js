@@ -5,6 +5,7 @@ import AllProducts from './components/AllProducts';
 import { Login } from './components/AuthForm';
 import Home from './components/Home';
 import SingleProduct from './components/SingleProduct';
+import ProductForm from './components/ProductForm';
 import { getUser } from './store';
 import Cart from './components/Cart';
 import Checkout from './components/checkout/Checkout';
@@ -26,6 +27,7 @@ class Routes extends React.Component {
       <div>
         <Switch>
           <Route exact path="/products" component={AllProducts} />
+          <Route path="/products/:productId/edit" component={ProductForm} />
           <Route path="/products/:productId" component={SingleProduct} />
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/checkout" component={Checkout} />

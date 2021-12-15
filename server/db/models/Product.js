@@ -60,4 +60,33 @@ Product.findById = async function (id) {
   return foundBook;
 };
 
+// Instance Methods
+Product.prototype.removeOldVariations = async function (newVariations) {
+  const formats = [this.format, ...newVariations.map((book) => book.format)];
+  try {
+    await Product.destroy({
+      where: {
+        format: {
+          [Sequelize.Op.notIn]: formats,
+        },
+        title: this.dataValues.title,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+Product.prototype.destroyProductAndVariations = async function () {
+  try {
+    await Product.destroy({
+      where: {
+        title: this.dataValues.title,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 module.exports = Product;
