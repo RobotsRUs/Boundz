@@ -53,10 +53,6 @@ class Cart extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    this.props.clearCart();
-  }
-
   render() {
     const { cart } = this.props;
     if (cart.length) {

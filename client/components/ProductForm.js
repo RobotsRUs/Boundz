@@ -2,8 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   Badge,
+  Chip,
+  Divider,
+  Backdrop,
   Button,
   Container,
+  CircularProgress,
   Grid,
   TextField,
   Box,
@@ -14,6 +18,11 @@ import {
   InputLabel,
   FormControl,
   IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@mui/material';
 import { fetchProduct, clearProduct } from '../store';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
@@ -40,6 +49,8 @@ class ProductForm extends React.Component {
       category: '',
       variations: [],
       imageFile: {},
+      processing: false,
+      displayDialog: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleImageSelect = this.handleImageSelect.bind(this);
@@ -47,6 +58,7 @@ class ProductForm extends React.Component {
     this.handleAddVariation = this.handleAddVariation.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.showDialogue = this.showDialogue.bind(this);
   }
 
   componentDidMount() {
@@ -139,7 +151,7 @@ class ProductForm extends React.Component {
     this.setState({
       variations: [
         ...this.state.variations,
-        { format: unusedFormats(usedFormats)[0] },
+        { format: unusedFormats(usedFormats)[0], price: '$', ISBN13: '' },
       ],
     });
   }
@@ -153,11 +165,12 @@ class ProductForm extends React.Component {
   }
 
   async handleSubmit(evt) {
+    this.setState({ processing: true });
     evt.preventDefault();
     const product = { ...this.state };
-    product.price = +product.price.slice(1) * 100;
+    product.price = parseInt(+product.price.slice(1) * 100);
     for (let variation of product.variations) {
-      variation.price = +variation.price.slice(1) * 100;
+      variation.price = parseInt(+variation.price.slice(1) * 100);
       delete variation.id;
     }
     // MAKIN A MESS:
@@ -199,8 +212,14 @@ class ProductForm extends React.Component {
   }
 
   async handleDelete() {
+    this.showDialogue(false);
+    this.setState({ processing: true });
     await axios.delete(`/api/products/${this.props.book.id}`);
     this.props.history.push('/products');
+  }
+
+  showDialogue(visibility) {
+    this.setState({ displayDialog: visibility });
   }
 
   render() {
@@ -222,151 +241,198 @@ class ProductForm extends React.Component {
     const usedFormats = [format, ...variations.map((book) => book.format)];
 
     return (
-      <Stack margin={2} style={{ gap: 20 }}>
-        <form onSubmit={this.handleSubmit}>
-          <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }}>
-            <Grid item xs={4} sm={1}>
-              <Badge
-                sx={{ margin: 1 }}
-                color="primary"
-                badgeContent={
-                  <label htmlFor="upload-image">
-                    <input
-                      accept="image/*"
-                      // value={imageUrl}
-                      name="imageUrl"
-                      type="file"
-                      onChange={this.handleImageSelect}
-                      id="upload-image"
-                      style={{ display: 'none' }}
-                    />
-                    <PhotoCamera />
-                  </label>
-                }
-              >
-                <img
-                  className="cover-art"
-                  src={imageUrl}
-                  style={{ maxWidth: '100%' }}
-                />
-              </Badge>
-            </Grid>
-            <Grid item xs sm>
-              <TextField
-                required
-                id="title"
-                name="title"
-                value={title}
-                onChange={this.handleChange}
-                label="Title"
-                fullWidth
-              />
-              <TextField
-                required
-                id="author"
-                name="author"
-                value={author}
-                onChange={this.handleChange}
-                label="Author"
-                fullWidth
-              />
+      <>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={this.state.processing}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <form onSubmit={this.handleSubmit} style={{ marginTop: '1rem' }}>
+          <Stack spacing={2}>
+            <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }}>
+              <Grid item xs={4} sm={1}>
+                <Badge
+                  sx={{ margin: 1 }}
+                  color="primary"
+                  badgeContent={
+                    <label htmlFor="upload-image">
+                      <input
+                        accept="image/*"
+                        // value={imageUrl}
+                        name="imageUrl"
+                        type="file"
+                        onChange={this.handleImageSelect}
+                        id="upload-image"
+                        style={{ display: 'none' }}
+                      />
+                      <PhotoCamera />
+                    </label>
+                  }
+                >
+                  <img
+                    className="cover-art"
+                    src={imageUrl}
+                    style={{ maxWidth: '100%' }}
+                  />
+                </Badge>
+              </Grid>
+              <Grid item xs sm>
+                <Stack spacing={2}>
+                  <TextField
+                    required
+                    id="title"
+                    name="title"
+                    value={title}
+                    onChange={this.handleChange}
+                    label="Title"
+                    fullWidth
+                  />
+                  <TextField
+                    required
+                    id="author"
+                    name="author"
+                    value={author}
+                    onChange={this.handleChange}
+                    label="Author"
+                    fullWidth
+                  />
 
-              <TextField
-                required
-                id="description"
-                name="description"
-                value={description}
-                onChange={this.handleChange}
-                label="Description"
-                fullWidth
-                multiline
-                minRows={2}
-              />
+                  <TextField
+                    required
+                    id="description"
+                    name="description"
+                    value={description}
+                    onChange={this.handleChange}
+                    label="Description"
+                    fullWidth
+                    multiline
+                    minRows={2}
+                  />
+                </Stack>
+              </Grid>
             </Grid>
-          </Grid>
-          <Typography variant="h5">Book Details</Typography>
 
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                required
-                id="summary"
-                name="summary"
-                value={summary}
-                onChange={this.handleChange}
-                label="Summary"
-                fullWidth
-                multiline
-                minRows={6}
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                required
-                id="length"
-                name="length"
-                value={length}
-                onChange={this.handleChange}
-                label="Length"
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                required
-                id="publisher"
-                name="publisher"
-                value={publisher}
-                onChange={this.handleChange}
-                label="Publisher"
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                required
-                id="category"
-                name="category"
-                value={category}
-                onChange={this.handleChange}
-                label="Category"
-              />
-            </Grid>
-          </Grid>
-
-          {/* PRODUCT VARIATIONS: */}
-          <ProductVariation
-            handleChange={this.handleChange}
-            format={format}
-            usedFormats={usedFormats}
-            price={price}
-            ISBN13={ISBN13}
-          />
-          {variations.map((variation, idx) => (
-            <ProductVariation
-              key={idx}
-              id={idx}
-              handleChange={this.handleChange}
-              format={variation.format}
-              usedFormats={usedFormats}
-              price={variation.price}
-              ISBN13={variation.ISBN13}
-              handleDelete={(idx) => this.handleDeleteVariation(idx)}
+            <TextField
+              required
+              id="summary"
+              name="summary"
+              value={summary}
+              onChange={this.handleChange}
+              label="Summary"
+              fullWidth
+              multiline
+              minRows={6}
             />
-          ))}
+            <Grid container>
+              <Grid item xs>
+                <TextField
+                  required
+                  id="length"
+                  name="length"
+                  value={length}
+                  onChange={this.handleChange}
+                  label="Length (pages)"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs>
+                <TextField
+                  required
+                  id="publisher"
+                  name="publisher"
+                  value={publisher}
+                  onChange={this.handleChange}
+                  label="Publisher"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs>
+                <TextField
+                  required
+                  id="category"
+                  name="category"
+                  value={category}
+                  onChange={this.handleChange}
+                  label="Category"
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
+            <Divider>
+              <Chip label="Product Variations" />
+            </Divider>
+            {/* PRODUCT VARIATIONS: */}
+            <ProductVariation
+              handleChange={this.handleChange}
+              format={format}
+              usedFormats={usedFormats}
+              price={price}
+              ISBN13={ISBN13}
+              handleAddVariation={this.handleAddVariation}
+              addButtonEnabled={variations.length < 2}
+            />
+            {variations.map((variation, idx) => (
+              <ProductVariation
+                key={idx}
+                id={idx}
+                handleChange={this.handleChange}
+                format={variation.format}
+                usedFormats={usedFormats}
+                price={variation.price}
+                ISBN13={variation.ISBN13}
+                handleDelete={(idx) => this.handleDeleteVariation(idx)}
+              />
+            ))}
 
-          {variations.length < 2 && (
-            <IconButton onClick={() => this.handleAddVariation(usedFormats)}>
-              <AddCircleIcon />
-            </IconButton>
-          )}
-
-          {/* END PRODUCT VARIATIONS */}
-
-          <Button type="submit">Submit</Button>
-          {this.props.book.id && (
-            <Button onClick={this.handleDelete}>Delete</Button>
-          )}
+            {/* END PRODUCT VARIATIONS */}
+            <Stack direction="row" spacing={1} justifyContent="flex-end">
+              {this.props.book.id && (
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => {
+                    this.showDialogue(true);
+                  }}
+                >
+                  Delete
+                </Button>
+              )}
+              <Button type="submit" variant="contained">
+                Submit
+              </Button>
+            </Stack>
+          </Stack>
         </form>
-      </Stack>
+        {/* Confirm Delete Dialog */}
+        <Dialog
+          open={this.state.displayDialog}
+          onClose={() => {
+            this.showDialogue(false);
+          }}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Confirm delete</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete this product?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                this.showDialogue(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button onClick={this.handleDelete} autoFocus>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
     );
   }
 }

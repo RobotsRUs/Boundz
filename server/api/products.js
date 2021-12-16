@@ -7,6 +7,19 @@ const {
 
 const upload = multer({ dest: './public/images/book-covers/' });
 
+// Admin Gatekeeper Middleware
+const adminGatekeeper = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    const err = new Error(
+      'You must be an administrator to perform this action'
+    );
+    err.status = 401;
+    next(err);
+  }
+};
+
 // GET /api/products
 router.get('/', async (req, res, next) => {
   try {
@@ -37,73 +50,89 @@ router.get('/:productId', async (req, res, next) => {
 });
 
 // POST /api/products
-router.post('/', upload.single('imageFile'), async (req, res, next) => {
-  try {
-    if (req.file) {
-      req.body.imageUrl = `/images/book-covers/${req.file.filename}`;
-    }
-    const variations = [];
-    // Create variations
-    for (let book of JSON.parse(req.body.variations)) {
-      const newBook = await Product.create({ ...req.body, ...book });
-      variations.push(newBook);
-    }
-
-    // Create product
-    const newProduct = await Product.create(req.body);
-    res.json(await Product.findById(newProduct.id));
-  } catch (err) {
-    console.error(err);
-  }
-});
-
-// PUT /api/products
-router.put(
-  '/:productId',
+router.post(
+  '/',
+  adminGatekeeper,
   upload.single('imageFile'),
   async (req, res, next) => {
     try {
       if (req.file) {
         req.body.imageUrl = `/images/book-covers/${req.file.filename}`;
       }
+      const variations = [];
+      // Create variations
+      for (let book of JSON.parse(req.body.variations)) {
+        const newBook = await Product.create({ ...req.body, ...book });
+        variations.push(newBook);
+      }
+
+      // Create product
+      const newProduct = await Product.create(req.body);
+      res.json(await Product.findById(newProduct.id));
+    } catch (err) {
+      console.error(err);
+    }
+  }
+);
+
+// PUT /api/products
+router.put(
+  '/:productId',
+  adminGatekeeper,
+  upload.single('imageFile'),
+  async (req, res, next) => {
+    try {
       const product = await Product.findById(req.params.productId);
       if (!product) {
         const err = new Error('Not found');
         err.status = 404;
         throw err;
-      } else {
-        const variations = JSON.parse(req.body.variations);
-        const newVariations = [];
+      }
 
-        // Destroy removed variations
-        await product.removeOldVariations(variations);
+      if (req.file) {
+        req.body.imageUrl = `/images/book-covers/${req.file.filename}`;
+      }
 
-        // Update variations
-        for (let book of variations) {
-          // Get product if it exists already
-          const foundBook = book.id ? await Product.findByPk(book.id) : null;
-          if (foundBook) {
-            for (let key in req.body) {
-              foundBook[key] = req.body[key];
-            }
-            for (let key in book) {
-              foundBook[key] = book[key];
-            }
-            await foundBook.save();
-            newVariations.push(foundBook);
-          } else {
-            const newBook = await Product.create({ ...req.body, ...book });
-            newVariations.push(newBook);
-          }
+      const variations = JSON.parse(req.body.variations);
+      const newVariations = [];
+
+      // Destroy removed variations
+      await product.removeOldVariations(variations);
+
+      // Update variations
+      for (let book of variations) {
+        // Get product if it exists already
+        const foundBook = await Product.findOne({
+          where: {
+            format: book.format,
+            title: product.title,
+          },
+        });
+        if (foundBook) {
+          foundBook.set({
+            ...req.body,
+            format: book.format,
+            price: book.price,
+            ISBN13: book.ISBN13,
+          });
+          console.log(foundBook);
+          await foundBook.save();
+          newVariations.push(foundBook);
+        } else {
+          const newBook = await Product.create({
+            ...req.body,
+            format: book.format,
+            price: book.price,
+            ISBN13: book.ISBN13,
+          });
+          newVariations.push(newBook);
         }
       }
 
       // Update found product
-      for (let key in req.body) {
-        product[key] = req.body[key];
-      }
-
+      product.set(req.body);
       await product.save();
+      product.dataValues.variations = newVariations;
       res.json(product);
     } catch (error) {
       next(error);
@@ -112,7 +141,7 @@ router.put(
 );
 
 // DELETE /api/products
-router.delete('/:productId', async (req, res, next) => {
+router.delete('/:productId', adminGatekeeper, async (req, res, next) => {
   try {
     const book = await Product.findByPk(req.params.productId);
     if (!book) {

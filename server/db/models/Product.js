@@ -66,10 +66,12 @@ Product.prototype.removeOldVariations = async function (newVariations) {
   try {
     await Product.destroy({
       where: {
-        format: {
-          [Sequelize.Op.notIn]: formats,
-        },
         title: this.dataValues.title,
+        [Sequelize.Op.not]: {
+          format: {
+            [Sequelize.Op.or]: formats,
+          },
+        },
       },
     });
   } catch (err) {
