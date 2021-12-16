@@ -183,7 +183,6 @@ class ProductForm extends React.Component {
       variation.price = parseInt(+variation.price * 100);
       delete variation.id;
     }
-    // MAKIN A MESS:
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -196,7 +195,6 @@ class ProductForm extends React.Component {
         : product[key];
       fd.append(key, val);
     }
-    // NEW:
     if (this.props.book.id) {
       const { data: updatedProduct } = await axios.put(
         `/api/products/${this.props.book.id}`,
@@ -212,13 +210,6 @@ class ProductForm extends React.Component {
       );
       this.props.history.push(`/products/${newProduct.id}`);
     }
-
-    /* OLD:
-    if (this.props.book.id) {
-      await axios.put(`/api/products/${this.props.book.id}`, product, header);
-    } else {
-      await axios.post('/api/products', product, header);
-    }*/
   }
 
   async handleDelete() {
