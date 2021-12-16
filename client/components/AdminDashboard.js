@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { Button, Menu, MenuItem, Avatar } from '@mui/material';
+import { Button, Menu, MenuItem } from '@mui/material';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import MenuBookIcon from '@mui/icons-material';
+import { logout } from '../store';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-export default class AdminDashboard extends React.Component {
+export class AdminDashboard extends React.Component {
   render() {
     return (
       <PopupState
@@ -15,21 +17,56 @@ export default class AdminDashboard extends React.Component {
         {(popupState) => (
           <React.Fragment>
             <Button variant="contained" {...bindTrigger(popupState)}>
-              ☰ Boundz Menu
+              📚 Boundz Menu 📚
             </Button>
             <Menu {...bindMenu(popupState)}>
-              <MenuItem onClick={popupState.close}>Current Inventory</MenuItem>
-              <MenuItem onClick={popupState.close}>Update Products</MenuItem>
-              <MenuItem onClick={popupState.close}>Customer Invoices</MenuItem>
+              <Link to="/home">
+                <MenuItem>🏠&nbsp;&nbsp;&nbsp;Boundz Home</MenuItem>
+              </Link>
+
+              <Link to="/products">
+                <MenuItem onClick={popupState.close}>
+                  📖&nbsp;&nbsp;&nbsp;Boundz Collection
+                </MenuItem>
+              </Link>
+
+              <Link to="/products/add">
+                <MenuItem onClick={popupState.close}>
+                  🔄&nbsp;&nbsp;&nbsp;Add New Product
+                </MenuItem>
+              </Link>
+
+              <Link to="/users/">
+                <MenuItem onClick={popupState.close}>
+                  👥&nbsp;&nbsp;&nbsp;Customer Accounts
+                </MenuItem>
+              </Link>
+              {/* 
               <MenuItem onClick={popupState.close}>
-                Customer Account Info
-              </MenuItem>
-              <MenuItem onClick={popupState.close}>
-                My Personal Account&nbsp;&nbsp;&nbsp;
-                <Avatar src="/broken-image.jpg" />
-              </MenuItem>
-              <MenuItem onClick={popupState.close}>My Personal Orders</MenuItem>
-              <MenuItem onClick={popupState.close}>Logout</MenuItem>
+                🧾&nbsp;&nbsp;&nbsp;Customer Invoices
+              </MenuItem> */}
+
+              <Link to="/cart">
+                <MenuItem onClick={popupState.close}>
+                  🛒&nbsp;&nbsp;&nbsp;Shopping Cart
+                </MenuItem>
+              </Link>
+
+              <Link to="/users/:userId">
+                <MenuItem onClick={popupState.close}>
+                  👤&nbsp;&nbsp;&nbsp;My Personal Account
+                </MenuItem>
+              </Link>
+
+              {/* <MenuItem onClick={popupState.close}>
+                🧾&nbsp;&nbsp;&nbsp;My Personal Orders
+              </MenuItem> */}
+
+              <Link to="#" onClick={this.handleClick}>
+                <MenuItem onClick={popupState.close}>
+                  🔚&nbsp;&nbsp;&nbsp;Logout
+                </MenuItem>
+              </Link>
             </Menu>
           </React.Fragment>
         )}
@@ -37,3 +74,22 @@ export default class AdminDashboard extends React.Component {
     );
   }
 }
+
+const mapState = (state) => {
+  return {
+    isLoggedIn: !!state.auth.id,
+  };
+};
+
+const mapDispatch = (dispatch) => {
+  return {
+    loadInitialData() {
+      dispatch(getUser());
+    },
+    handleClick() {
+      dispatch(logout());
+    },
+  };
+};
+
+export default connect(mapState, mapDispatch)(AdminDashboard);

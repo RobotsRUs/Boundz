@@ -60,20 +60,6 @@ export class UpdateUserInfo extends React.Component {
 
     return (
       <div>
-        <AppBar position="sticky">
-          <div>
-            <h1 className="centered">
-              WELCOME👐BIENVENIDO👐BIENVENUE👐ДОБРО ПОЖАЛОВАТЬ👐أهلا بك
-              👐BIENVENI👐환영하다👐WELKOM👐ようこそ👐ברוך הבא
-            </h1>
-            <h1 className="centered">to the Boundz</h1>
-            <h1 className="centered">
-              FAMILY👐FAMILIA👐FAMILLE👐СЕМЬЯ👐أسرة👐FANMI👐가족👐FAMILIE👐家族👐מִשׁפָּחָה
-            </h1>
-          </div>
-        </AppBar>
-        <br />
-
         <Typography variant="h4">Update Account Info</Typography>
         <br />
 

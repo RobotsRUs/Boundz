@@ -4,28 +4,27 @@ import { Link } from 'react-router-dom';
 import { logout } from '../store';
 import UserDashboard from './UserDashboard';
 import AdminDashboard from './AdminDashboard';
+import { SearchBar } from './SearchBar';
 
 const Navbar = ({ handleClick, isLoggedIn }) => (
   <div>
-    <h1>GS-App-Template</h1>
+    {/* <h1>📖&nbsp;&nbsp;&nbsp;Boundz Bookz&nbsp;&nbsp;&nbsp;📖</h1> */}
     <nav>
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
           <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
+          <Link to="/menu" component={SearchBar} />
+          {/* <Link to="/menu" component={AdminDashboard}></Link> */}
+          {/* <a href="#" onClick={handleClick}>
             Logout
-          </a>
+          </a> */}
         </div>
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/products">Browse</Link>
-          <Link to="/cart">Cart</Link>
-          <Link to="/menu" component={UserDashboard}></Link>
-          {/* <Link to="/menu" component={AdminDashboard}></Link> */}
+
+          <Link to="/menu" component={SearchBar} />
         </div>
       )}
     </nav>

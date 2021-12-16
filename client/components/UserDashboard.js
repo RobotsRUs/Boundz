@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { Button, Menu, MenuItem, Avatar } from '@mui/material';
+import { Button, Menu, MenuItem, Avatar, SvgIcon } from '@mui/material';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import MenuBookIcon from '@mui/icons-material';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-export default class UserDashboard extends React.Component {
+export class UserDashboard extends React.Component {
   render() {
+    const { isLoggedIn } = this.props;
     return (
       <PopupState
         container
@@ -15,19 +17,58 @@ export default class UserDashboard extends React.Component {
         {(popupState) => (
           <React.Fragment>
             <Button variant="contained" {...bindTrigger(popupState)}>
-              ☰ Boundz Menu
+              📚 Boundz Menu 📚
             </Button>
             <Menu {...bindMenu(popupState)}>
-              <MenuItem onClick={popupState.close}>
-                Genres
-                <img src={MenuBookIcon} />
-              </MenuItem>
-              <MenuItem onClick={popupState.close}>
-                My Account&nbsp;&nbsp;&nbsp;
-                <Avatar src="/broken-image.jpg" />
-              </MenuItem>
-              <MenuItem onClick={popupState.close}>Past Orders</MenuItem>
-              <MenuItem onClick={popupState.close}>Logout</MenuItem>
+              <Link to="/home">
+                <MenuItem onClick={popupState.close}>
+                  🏠&nbsp;&nbsp;&nbsp;Boundz Home
+                </MenuItem>
+              </Link>
+
+              <Link to="/products">
+                <MenuItem onClick={popupState.close}>
+                  📖&nbsp;&nbsp;&nbsp;Boundz Collection
+                </MenuItem>
+              </Link>
+
+              <Link to="/cart">
+                <MenuItem onClick={popupState.close}>
+                  🛒&nbsp;&nbsp;&nbsp;Shopping Cart
+                </MenuItem>
+              </Link>
+
+              {isLoggedIn ? (
+                <>
+                  <Link to="/users/:userId">
+                    <MenuItem onClick={popupState.close}>
+                      👤&nbsp;&nbsp;&nbsp;My Account
+                    </MenuItem>
+                  </Link>
+                  <MenuItem onClick={popupState.close}>
+                    🧾&nbsp;&nbsp;&nbsp;Past Orders
+                  </MenuItem>
+                  <Link to="#" onClick={this.handleClick}>
+                    <MenuItem onClick={popupState.close}>
+                      🔚&nbsp;&nbsp;&nbsp;Logout
+                    </MenuItem>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/signup">
+                    <MenuItem onClick={popupState.close}>
+                      📜&nbsp;&nbsp;&nbsp;Register Here
+                    </MenuItem>
+                  </Link>
+
+                  <Link to="/login">
+                    <MenuItem onClick={popupState.close}>
+                      🔛&nbsp;&nbsp;&nbsp;Login
+                    </MenuItem>
+                  </Link>
+                </>
+              )}
             </Menu>
           </React.Fragment>
         )}
@@ -35,3 +76,19 @@ export default class UserDashboard extends React.Component {
     );
   }
 }
+
+const mapState = (state) => {
+  return {
+    isLoggedIn: !!state.auth.id,
+  };
+};
+
+const mapDispatch = (dispatch) => {
+  return {
+    loadInitialData() {
+      dispatch(getUser());
+    },
+  };
+};
+
+export default connect(mapState, mapDispatch)(UserDashboard);
