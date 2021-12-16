@@ -8,6 +8,7 @@ import {
   TextField,
   IconButton,
   Container,
+  InputAdornment,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -56,6 +57,14 @@ const ProductVariation = ({
         value={price}
         onChange={handleChange}
         label="Price"
+        type="number"
+        InputProps={{
+          startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          inputProps: {
+            min: 0,
+            step: 0.01,
+          },
+        }}
         fullWidth
       />
     </Grid>

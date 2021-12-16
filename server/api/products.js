@@ -43,6 +43,36 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// GET /api/products/categories
+router.get('/categories', async (req, res, next) => {
+  try {
+    const categories = await Product.findAll({
+      attributes: ['category'],
+      group: 'category',
+      distinct: true,
+      order: [['category', 'ASC']],
+    });
+    res.send(categories.map((category) => category.category));
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /api/products/publishers
+router.get('/publishers', async (req, res, next) => {
+  try {
+    const publishers = await Product.findAll({
+      attributes: ['publisher'],
+      group: 'publisher',
+      distinct: true,
+      order: [['publisher', 'ASC']],
+    });
+    res.send(publishers.map((publisher) => publisher.publisher));
+  } catch (err) {
+    next(err);
+  }
+});
+
 // GET /api/products/:productId
 router.get('/:productId', async (req, res, next) => {
   try {

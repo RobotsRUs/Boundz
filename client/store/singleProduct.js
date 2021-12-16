@@ -15,6 +15,9 @@ export const fetchProduct = (productName) => async (dispatch) => {
     dispatch(_setProduct(product));
   } catch (err) {
     console.log(err);
+    if (err.response.status) {
+      dispatch(_setProduct({ error404: true }));
+    }
   }
 };
 

@@ -30,7 +30,9 @@ class Routes extends React.Component {
             <Route exact path="/products/add" component={ProductForm} />
           )}
           <Route exact path="/products" component={AllProducts} />
-          <Route path="/products/:productId/edit" component={ProductForm} />
+          {isAdmin && (
+            <Route path="/products/:productId/edit" component={ProductForm} />
+          )}
           <Route path="/products/:productId" component={SingleProduct} />
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/checkout" component={Checkout} />

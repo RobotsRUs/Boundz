@@ -31,6 +31,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
 import Delete from '@mui/icons-material/Delete';
 import axios from 'axios';
+import Display404 from './Display404';
 
 class SingleProduct extends React.Component {
   constructor(props) {
@@ -42,6 +43,7 @@ class SingleProduct extends React.Component {
       alert: '',
       processing: false,
       displayDialog: false,
+      show404: false,
     };
     this.handleFormatChange = this.handleFormatChange.bind(this);
     this.handleQtyChange = this.handleQtyChange.bind(this);
@@ -52,7 +54,11 @@ class SingleProduct extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchProduct(this.props.match.params.productId);
+    if (Number.isInteger(+this.props.match.params.productId)) {
+      this.props.fetchProduct(this.props.match.params.productId);
+    } else {
+      this.setState({ show404: true });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -100,7 +106,9 @@ class SingleProduct extends React.Component {
   }
 
   render() {
-    if (!this.props.book.id) {
+    if (this.state.show404 || this.props.book.error404) {
+      return <Display404 />;
+    } else if (!this.props.book.id) {
       return <Loading />;
     } else {
       const {
