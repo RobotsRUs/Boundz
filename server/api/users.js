@@ -96,9 +96,9 @@ router.put('/:userId/cart/:productId', async (req, res, next) => {
       quantity
     );
     if (!updatedCartItem) {
-      const error = new Error('Item not found in cart');
-      error.status = 404;
-      throw error;
+      const err = new Error('Item not found in cart');
+      err.status = 404;
+      next(err);
     } else {
       res.json(updatedCartItem);
     }
@@ -120,9 +120,9 @@ router.delete('/:userId/cart/:productId', async (req, res, next) => {
     const { userId, productId } = req.params;
     const removedCartItem = await LineItem.removeItem(+userId, +productId);
     if (!removedCartItem) {
-      const error = new Error('Item not found in cart');
-      error.status = 404;
-      throw error;
+      const err = new Error('Item not found in cart');
+      err.status = 404;
+      next(err);
     } else {
       res.json(removedCartItem);
     }

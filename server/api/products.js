@@ -84,8 +84,8 @@ router.get('/:productId', async (req, res, next) => {
     } else {
       res.json(product);
     }
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 });
 
