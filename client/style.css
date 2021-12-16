@@ -1,5 +1,6 @@
 body {
   font-family: sans-serif;
+  background-color: #9999cc;
 }
 
 a {
@@ -14,8 +15,4 @@ nav a {
   display: inline-block;
   margin: 1em;
 }
-/*
-form div {
-  margin: 1em;
-  display: inline-block;
-} */
+

@@ -3,15 +3,16 @@ const {
   models: { User, LineItem, Order },
 } = require('../db/index');
 
-// GET /api/users
-router.get('/', async (req, res, next) => {
-  if (!req.user || !req.user.isAdmin) {
-    const err = new Error(
-      'You must be an administrator to perform this action'
-    );
-    err.status = 401;
-    next(err);
+function validateIsAdmin(req, res, next) {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    next(new Error("You don't have administrative access!"));
   }
+}
+
+// GET /api/users
+router.get('/', validateIsAdmin, async (req, res, next) => {
   try {
     const users = await User.findAll({ attributes: ['id', 'username'] });
     res.json(users);

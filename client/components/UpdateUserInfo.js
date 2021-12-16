@@ -2,18 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { authenticate, updateUser } from '../store';
 
-import {
-  Typography,
-  AppBar,
-  TextField,
-  Grid,
-  Button,
-  FormControl,
-  FormLabel,
-  FormControlLabel,
-  RadioGroup,
-  Radio,
-} from '@mui/material';
+import { Typography, AppBar, TextField, Grid, Button } from '@mui/material';
 
 export class UpdateUserInfo extends React.Component {
   constructor() {
@@ -30,7 +19,6 @@ export class UpdateUserInfo extends React.Component {
       city: '',
       state: '',
       zipCode: '',
-      userType: 'Customer',
     };
 
     this.handleChangeEvent = this.handleChangeEvent.bind(this);
@@ -60,7 +48,6 @@ export class UpdateUserInfo extends React.Component {
       city: '',
       state: '',
       zipCode: '',
-      userType: 'Customer',
     });
   }
 
@@ -73,20 +60,6 @@ export class UpdateUserInfo extends React.Component {
 
     return (
       <div>
-        <AppBar position="sticky">
-          <div>
-            <h1 className="centered">
-              WELCOME👐BIENVENIDO👐BIENVENUE👐ДОБРО ПОЖАЛОВАТЬ👐أهلا بك
-              👐BIENVENI👐환영하다👐WELKOM👐ようこそ👐ברוך הבא
-            </h1>
-            <h1 className="centered">to the Boundz</h1>
-            <h1 className="centered">
-              FAMILY👐FAMILIA👐FAMILLE👐СЕМЬЯ👐أسرة👐FANMI👐가족👐FAMILIE👐家族👐מִשׁפָּחָה
-            </h1>
-          </div>
-        </AppBar>
-        <br />
-
         <Typography variant="h4">Update Account Info</Typography>
         <br />
 
@@ -248,29 +221,6 @@ export class UpdateUserInfo extends React.Component {
           </Grid>
           <br />
 
-          <Grid item xs={6}>
-            <FormControl component="fieldset">
-              <FormLabel component="legend">Account Type</FormLabel>
-              <RadioGroup
-                aria-label="accountType"
-                defaultValue="Customer"
-                name="radio-buttons-group"
-              >
-                <FormControlLabel
-                  value="Customer"
-                  control={<Radio />}
-                  label="Customer"
-                />
-                <FormControlLabel
-                  value="Administrator"
-                  control={<Radio />}
-                  label="Administrator"
-                />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-          <br />
-
           <Grid item xs={9} /*justifyContent="flex-end"*/>
             <Button
               color="primary"
@@ -286,22 +236,6 @@ export class UpdateUserInfo extends React.Component {
   }
 }
 
-const mapUpdate = (state) => {
-  return {
-    name: 'update',
-    displayName: 'Update Info',
-    error: state.auth.error,
-  };
-};
+const mapDispatch = (dispatch) => {};
 
-const mapDispatch = (dispatch) => {
-  return {
-    handleSubmit(event) {
-      event.preventDefault();
-      [event.target.name] = event.target.name.value;
-      dispatch(authenticate(username, password));
-    },
-  };
-};
-
-export default connect(mapUpdate, { updateUser, mapDispatch })(UpdateUserInfo);
+export default connect(null, { updateUser, mapDispatch })(UpdateUserInfo);

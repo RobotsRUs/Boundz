@@ -2,20 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../store';
+import UserDashboard from './UserDashboard';
+import AdminDashboard from './AdminDashboard';
+import { SearchBar } from './SearchBar';
 import CartIcon from './CartIcon';
 
 const Navbar = ({ handleClick, isLoggedIn }) => (
   <div>
-    <h1>Boundz Bookstore</h1>
     <nav>
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
           <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-          <Link to="/products">Browse</Link>
+          <Link to="/menu" component={SearchBar} />
           <Link to="/cart">
             <CartIcon />
           </Link>
@@ -23,9 +22,8 @@ const Navbar = ({ handleClick, isLoggedIn }) => (
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/products">Browse</Link>
+
+          <Link to="/menu" component={SearchBar} />
           <Link to="/cart">
             <CartIcon />
           </Link>
