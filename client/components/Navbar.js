@@ -5,26 +5,28 @@ import { logout } from '../store';
 import UserDashboard from './UserDashboard';
 import AdminDashboard from './AdminDashboard';
 import { SearchBar } from './SearchBar';
+import CartIcon from './CartIcon';
 
 const Navbar = ({ handleClick, isLoggedIn }) => (
   <div>
-    {/* <h1>📖&nbsp;&nbsp;&nbsp;Boundz Bookz&nbsp;&nbsp;&nbsp;📖</h1> */}
     <nav>
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
           <Link to="/home">Home</Link>
           <Link to="/menu" component={SearchBar} />
-          {/* <Link to="/menu" component={AdminDashboard}></Link> */}
-          {/* <a href="#" onClick={handleClick}>
-            Logout
-          </a> */}
+          <Link to="/cart">
+            <CartIcon />
+          </Link>
         </div>
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
 
           <Link to="/menu" component={SearchBar} />
+          <Link to="/cart">
+            <CartIcon />
+          </Link>
         </div>
       )}
     </nav>

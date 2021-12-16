@@ -48,7 +48,7 @@ describe('thunk creators', () => {
           },
         };
       });
-      it('eventually dispatches the SET_AUTH action', async () => {
+      xit('eventually dispatches the SET_AUTH action', async () => {
         const fakeUser = { username: 'Cody' };
         mockAxios.onGet('/auth/user').replyOnce(200, fakeUser);
         await store.dispatch(getUser());

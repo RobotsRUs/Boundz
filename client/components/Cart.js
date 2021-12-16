@@ -1,13 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  clearCart,
-  emptyCart,
-  fetchCart,
-  removeFromCart,
-  updateItemQty,
-} from '../store';
+import { emptyCart, fetchCart, removeFromCart, updateItemQty } from '../store';
 import CartItem from './CartItem';
 import { formatUSD, getCartTotal } from './utils';
 import {
@@ -51,10 +45,6 @@ class Cart extends React.Component {
     if (this.props.auth.id !== prevProps.auth.id) {
       this.props.fetchCart(this.props.auth.id);
     }
-  }
-
-  componentWillUnmount() {
-    this.props.clearCart();
   }
 
   render() {
@@ -178,7 +168,6 @@ const mapState = (state) => ({
 
 const mapDispatch = (dispatch) => ({
   fetchCart: (userId) => dispatch(fetchCart(userId)),
-  clearCart: () => dispatch(clearCart()),
   updateItemQty: (userId, product, qty) =>
     dispatch(updateItemQty(userId, product, qty)),
   removeFromCart: (userId, product) =>

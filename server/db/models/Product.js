@@ -47,6 +47,7 @@ const Product = db.define('product', {
 });
 
 // Class Methods:
+
 Product.findById = async function (id) {
   const foundBook = await this.findByPk(id);
   if (foundBook) {
@@ -58,6 +59,37 @@ Product.findById = async function (id) {
     });
   }
   return foundBook;
+};
+
+// Instance Methods
+Product.prototype.removeOldVariations = async function (newVariations) {
+  const formats = [this.format, ...newVariations.map((book) => book.format)];
+  try {
+    await Product.destroy({
+      where: {
+        title: this.dataValues.title,
+        [Sequelize.Op.not]: {
+          format: {
+            [Sequelize.Op.or]: formats,
+          },
+        },
+      },
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+Product.prototype.destroyProductAndVariations = async function () {
+  try {
+    await Product.destroy({
+      where: {
+        title: this.dataValues.title,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 module.exports = Product;

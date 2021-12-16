@@ -4,7 +4,7 @@ const {
 } = require('../db/index');
 
 function validateIsAdmin(req, res, next) {
-  if (req.user.isAdmin === true) {
+  if (req.user && req.user.isAdmin) {
     next();
   } else {
     next(new Error("You don't have administrative access!"));
@@ -23,8 +23,15 @@ router.get('/', validateIsAdmin, async (req, res, next) => {
 
 // GET /api/users/:userId/cart
 router.get('/:userId/cart', async (req, res, next) => {
+  if (!(req.user && (req.user.id === +req.params.userId || req.user.isAdmin))) {
+    const err = new Error(
+      'You must be an administrator or the appropriate user to perform this action'
+    );
+    err.status = 401;
+    next(err);
+  }
   try {
-    res.json(await LineItem.findByUserId(req.params.userId));
+    res.json(await LineItem.findByUserId(+req.params.userId));
   } catch (err) {
     next(err);
   }
@@ -33,7 +40,7 @@ router.get('/:userId/cart', async (req, res, next) => {
 // POST /api/users/
 router.post('/', async (req, res, next) => {
   try {
-    const createdUser = await User.create(req.body);
+    const createdUser = await User.create({ ...req.body, isAdmin: false });
     res.status(201).json(createdUser);
   } catch (error) {
     next(error);
@@ -42,10 +49,17 @@ router.post('/', async (req, res, next) => {
 
 // POST /api/users/:userId/cart
 router.post('/:userId/cart', async (req, res, next) => {
+  if (!(req.user && (req.user.id === +req.params.userId || req.user.isAdmin))) {
+    const err = new Error(
+      'You must be an administrator or the appropriate user to perform this action'
+    );
+    err.status = 401;
+    next(err);
+  }
   try {
     const { userId } = req.params;
     const { productId, quantity } = req.body;
-    res.json(await LineItem.addItem(userId, productId, quantity));
+    res.json(await LineItem.addItem(+userId, productId, quantity));
   } catch (err) {
     next(err);
   }
@@ -54,8 +68,11 @@ router.post('/:userId/cart', async (req, res, next) => {
 // PUT /api/users
 router.put('/:userId', async (req, res, next) => {
   try {
-    const userBeingUpdated = await User.findByPk(req.params.userId);
-    const wasUpdated = await userBeingUpdated.update(req.body);
+    const userBeingUpdated = await User.findByPk(+req.params.userId);
+    const wasUpdated = await userBeingUpdated.update({
+      ...req.body,
+      isAdmin: false,
+    });
     res.send(wasUpdated);
   } catch (error) {
     next(error);
@@ -64,18 +81,25 @@ router.put('/:userId', async (req, res, next) => {
 
 // PUT /api/users/:userId/cart/:productId
 router.put('/:userId/cart/:productId', async (req, res, next) => {
+  if (!(req.user && (req.user.id === +req.params.userId || req.user.isAdmin))) {
+    const err = new Error(
+      'You must be an administrator or the appropriate user to perform this action'
+    );
+    err.status = 401;
+    next(err);
+  }
   try {
     const { userId, productId } = req.params;
     const { quantity } = req.body;
     const updatedCartItem = await LineItem.updateItemQty(
-      userId,
-      productId,
+      +userId,
+      +productId,
       quantity
     );
     if (!updatedCartItem) {
-      const error = new Error('Item not found in cart');
-      error.status = 404;
-      throw error;
+      const err = new Error('Item not found in cart');
+      err.status = 404;
+      next(err);
     } else {
       res.json(updatedCartItem);
     }
@@ -86,13 +110,20 @@ router.put('/:userId/cart/:productId', async (req, res, next) => {
 
 // DELETE /api/users/:userId/cart/:productId
 router.delete('/:userId/cart/:productId', async (req, res, next) => {
+  if (!(req.user && (req.user.id === +req.params.userId || req.user.isAdmin))) {
+    const err = new Error(
+      'You must be an administrator or the appropriate user to perform this action'
+    );
+    err.status = 401;
+    next(err);
+  }
   try {
     const { userId, productId } = req.params;
-    const removedCartItem = await LineItem.removeItem(userId, productId);
+    const removedCartItem = await LineItem.removeItem(+userId, +productId);
     if (!removedCartItem) {
-      const error = new Error('Item not found in cart');
-      error.status = 404;
-      throw error;
+      const err = new Error('Item not found in cart');
+      err.status = 404;
+      next(err);
     } else {
       res.json(removedCartItem);
     }
@@ -103,8 +134,15 @@ router.delete('/:userId/cart/:productId', async (req, res, next) => {
 
 // DELETE /api/users/:userId/cart
 router.delete('/:userId/cart', async (req, res, next) => {
+  if (!(req.user && (req.user.id === +req.params.userId || req.user.isAdmin))) {
+    const err = new Error(
+      'You must be an administrator or the appropriate user to perform this action'
+    );
+    err.status = 401;
+    next(err);
+  }
   try {
-    await LineItem.emptyCart(req.params.userId);
+    await LineItem.emptyCart(+req.params.userId);
     res.json();
   } catch (err) {
     next(err);
@@ -136,6 +174,17 @@ router.post('/:userId/checkout', async (req, res, next) => {
       res.json(order.id);
     } else {
       // If checking out as logged in user:
+
+      if (
+        !(req.user && (req.user.id === +req.params.userId || req.user.isAdmin))
+      ) {
+        const err = new Error(
+          'You must be an administrator or the appropriate user to perform this action'
+        );
+        err.status = 401;
+        next(err);
+      }
+
       const order = await Order.findOne({
         where: {
           fulfilled: false,

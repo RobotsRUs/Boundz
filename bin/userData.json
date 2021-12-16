@@ -1,4 +1,18 @@
 [
+    {
+    "username": "admin",
+    "password": "admin",
+    "firstName": "Greg",
+    "lastName": "S",
+    "email": "greg@theadmin.com",
+    "phoneNumber": "952-610-1533",
+    "address1": "2649 Macpherson Road",
+    "address2": "1B",
+    "city": "Young America",
+    "state": "Minnesota",
+    "zipCode": "55551",
+    "isAdmin": true
+  },
   {
     "username": "lgraveney0",
     "password": "3pDhljX",
