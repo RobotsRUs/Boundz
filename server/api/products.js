@@ -23,7 +23,6 @@ const adminGatekeeper = (req, res, next) => {
 
 // GET /api/products
 router.get('/', async (req, res, next) => {
-  console.log(req.query);
   const page = +req.query.page || 1;
   const count = +req.query.count || 12;
   const { author, category, title } = req.query;
