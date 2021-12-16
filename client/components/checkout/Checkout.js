@@ -18,7 +18,7 @@ import creditCardValidateExpiry from 'credit-card-expiry-validator';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
-import { fetchCart, clearCart, emptyCart } from '../../store';
+import { fetchCart, emptyCart } from '../../store';
 import { CircularProgress } from '@mui/material';
 
 function Copyright() {
@@ -124,10 +124,6 @@ class Checkout extends React.Component {
         },
       });
     }
-  }
-
-  componentWillUnmount() {
-    this.props.clearCart();
   }
 
   handleChange(evt) {
@@ -250,7 +246,6 @@ const mapState = (state) => ({
 
 const mapDispatch = (dispatch) => ({
   fetchCart: (userId) => dispatch(fetchCart(userId)),
-  clearCart: () => dispatch(clearCart()),
   emptyCart: () => dispatch(emptyCart()),
 });
 

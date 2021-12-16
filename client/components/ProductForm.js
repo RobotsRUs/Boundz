@@ -23,6 +23,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Autocomplete,
 } from '@mui/material';
 import { fetchProduct, clearProduct } from '../store';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
@@ -51,6 +52,8 @@ class ProductForm extends React.Component {
       imageFile: {},
       processing: false,
       displayDialog: false,
+      existingCategories: [],
+      existingPublishers: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleImageSelect = this.handleImageSelect.bind(this);
@@ -61,8 +64,20 @@ class ProductForm extends React.Component {
     this.showDialogue = this.showDialogue.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.fetchProduct(this.props.match.params.productId);
+    try {
+      const { data: existingCategories } = await axios.get(
+        '/api/products/categories'
+      );
+      this.setState({ existingCategories });
+      const { data: existingPublishers } = await axios.get(
+        '/api/products/publishers'
+      );
+      this.setState({ existingPublishers });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -83,9 +98,9 @@ class ProductForm extends React.Component {
         category,
         variations,
       } = this.props.book;
-      const price = formatUSD(this.props.book.price);
+      const price = formatUSD(this.props.book.price).slice(1);
       for (let book of variations) {
-        book.price = formatUSD(book.price);
+        book.price = formatUSD(book.price).slice(1);
       }
       this.setState({
         title,
@@ -124,11 +139,6 @@ class ProductForm extends React.Component {
       name = 'ISBN13';
     }
 
-    // Check if field was a price field, and if so, format it in USD
-    if (name === 'price' && value && value[0] !== '$') {
-      value = `$${value}`;
-    }
-
     // Update state for main product or variant
     if (idx === null) {
       this.setState({ [name]: value });
@@ -151,7 +161,7 @@ class ProductForm extends React.Component {
     this.setState({
       variations: [
         ...this.state.variations,
-        { format: unusedFormats(usedFormats)[0], price: '$', ISBN13: '' },
+        { format: unusedFormats(usedFormats)[0], price: '', ISBN13: '' },
       ],
     });
   }
@@ -167,10 +177,10 @@ class ProductForm extends React.Component {
   async handleSubmit(evt) {
     this.setState({ processing: true });
     evt.preventDefault();
-    const product = { ...this.state };
-    product.price = parseInt(+product.price.slice(1) * 100);
+    const product = JSON.parse(JSON.stringify(this.state));
+    product.price = parseInt(+product.price * 100);
     for (let variation of product.variations) {
-      variation.price = parseInt(+variation.price.slice(1) * 100);
+      variation.price = parseInt(+variation.price * 100);
       delete variation.id;
     }
     // MAKIN A MESS:
@@ -333,29 +343,58 @@ class ProductForm extends React.Component {
                   value={length}
                   onChange={this.handleChange}
                   label="Length (pages)"
+                  type="number"
+                  InputProps={{
+                    inputProps: {
+                      min: 0,
+                      step: 1,
+                    },
+                  }}
                   fullWidth
                 />
               </Grid>
               <Grid item xs>
-                <TextField
-                  required
-                  id="publisher"
-                  name="publisher"
+                <Autocomplete
+                  freeSolo
                   value={publisher}
-                  onChange={this.handleChange}
-                  label="Publisher"
-                  fullWidth
+                  onChange={(evt, val) =>
+                    this.handleChange({
+                      target: { name: 'publisher', value: val || '' },
+                    })
+                  }
+                  options={this.state.existingPublishers}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      id="publisher"
+                      name="publisher"
+                      onChange={this.handleChange}
+                      label="Publisher"
+                      fullWidth
+                    />
+                  )}
                 />
               </Grid>
               <Grid item xs>
-                <TextField
-                  required
-                  id="category"
-                  name="category"
+                <Autocomplete
+                  freeSolo
                   value={category}
-                  onChange={this.handleChange}
-                  label="Category"
-                  fullWidth
+                  onChange={(evt, val) =>
+                    this.handleChange({
+                      target: { name: 'category', value: val || '' },
+                    })
+                  }
+                  options={this.state.existingCategories}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      id="category"
+                      name="category"
+                      onChange={this.handleChange}
+                      label="Category"
+                      fullWidth
+                    />
+                  )}
                 />
               </Grid>
             </Grid>
