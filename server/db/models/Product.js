@@ -47,6 +47,7 @@ const Product = db.define('product', {
 });
 
 // Class Methods:
+
 Product.findById = async function (id) {
   const foundBook = await this.findByPk(id);
   if (foundBook) {

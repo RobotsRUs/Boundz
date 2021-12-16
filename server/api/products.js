@@ -2,6 +2,7 @@ const router = require('express').Router();
 const sequelize = require('sequelize');
 const multer = require('multer');
 const {
+  db,
   models: { Product },
 } = require('../db');
 
@@ -23,10 +24,19 @@ const adminGatekeeper = (req, res, next) => {
 // GET /api/products
 router.get('/', async (req, res, next) => {
   try {
-    const allProducts = await Product.findAll({
-      group: ['id', 'title'],
-      distinct: true,
-    });
+    const QUERY = `
+    WITH added_row_number AS (
+      SELECT
+        *, MIN(PRICE) OVER(PARTITION BY title) AS minPrice, MAX(PRICE) OVER(PARTITION BY title) AS maxPrice,
+        ROW_NUMBER() OVER(PARTITION BY title ORDER BY price DESC) AS row_number
+      FROM products
+    )
+    SELECT
+    id, title, author, description, summary, format, "ISBN13", "imageUrl", price, length, publisher, category, minPrice, maxPrice
+    FROM added_row_number
+    WHERE row_number = 1;
+    `;
+    const allProducts = await db.query(QUERY, { model: Product });
     res.send(allProducts);
   } catch (err) {
     next(err);
