@@ -23,21 +23,35 @@ const adminGatekeeper = (req, res, next) => {
 
 // GET /api/products
 router.get('/', async (req, res, next) => {
+  console.log(req.query);
+  const page = +req.query.page || 1;
+  const count = +req.query.count || 12;
+  const { author, category, title } = req.query;
+  const filters = [];
+  if (author) filters.push(`author ILIKE '%${author}%'`);
+  if (category) filters.push(`category ILIKE '${category}'`);
+  if (title) filters.push(`title ILIKE '${title}%'`);
   try {
     const QUERY = `
     WITH added_row_number AS (
       SELECT
         *, MIN(PRICE) OVER(PARTITION BY title) AS minPrice, MAX(PRICE) OVER(PARTITION BY title) AS maxPrice,
         ROW_NUMBER() OVER(PARTITION BY title ORDER BY price DESC) AS row_number
-      FROM products
+      FROM products ${filters.length ? `WHERE ${filters.join(' AND ')}` : ''}
     )
     SELECT
-    id, title, author, description, summary, format, "ISBN13", "imageUrl", price, length, publisher, category, minPrice, maxPrice
+    id, title, author, description, summary, format, "ISBN13", "imageUrl", price, length, publisher, category, minPrice, maxPrice, count(*) OVER() as totalCount
     FROM added_row_number
-    WHERE row_number = 1;
+    WHERE row_number = 1
+    LIMIT ${count} OFFSET ${(page - 1) * count};
     `;
-    const allProducts = await db.query(QUERY, { model: Product });
-    res.send(allProducts);
+    const products = await db.query(QUERY, { model: Product });
+    const totalPages = products.length
+      ? Math.ceil(products[0].dataValues.totalcount / count)
+      : 1;
+    res.set('totalPages', totalPages);
+    res.set('Access-Control-Expose-Headers', 'totalPages');
+    res.send(products);
   } catch (err) {
     next(err);
   }
