@@ -72,14 +72,11 @@ export const addToCart =
   async (dispatch) => {
     try {
       if (userId) {
-        const { data: cartItem } = await axios.post(
-          `/api/users/${userId}/cart`,
-          {
-            productId: product.id,
-            quantity,
-          }
-        );
-        dispatch(_addToCart(cartItem));
+        await axios.post(`/api/users/${userId}/cart`, {
+          productId: product.id,
+          quantity,
+        });
+        dispatch(_addToCart(product, quantity));
       } else {
         const currentCart = getLocalStorageCart();
         setLocalStorageCart(addItemOrUpdateQty(currentCart, product, quantity));
