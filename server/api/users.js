@@ -13,8 +13,15 @@ function validateIsAdmin(req, res, next) {
 
 // GET /api/users
 router.get('/', validateIsAdmin, async (req, res, next) => {
+  if (!(req.user && (req.user.id === +req.params.userId || req.user.isAdmin))) {
+    const err = new Error(
+      'You must be an administrator or the appropriate user to perform this action'
+    );
+    err.status = 401;
+    next(err);
+  }
   try {
-    const users = await User.findAll({ attributes: ['id', 'username'] });
+    const users = await User.findAll();
     res.json(users);
   } catch (err) {
     next(err);
@@ -67,6 +74,13 @@ router.post('/:userId/cart', async (req, res, next) => {
 
 // PUT /api/users
 router.put('/:userId', async (req, res, next) => {
+  if (!(req.user && (req.user.id === +req.params.userId || req.user.isAdmin))) {
+    const err = new Error(
+      'You must be an administrator or the appropriate user to perform this action'
+    );
+    err.status = 401;
+    next(err);
+  }
   try {
     const userBeingUpdated = await User.findByPk(+req.params.userId);
     const wasUpdated = await userBeingUpdated.update({

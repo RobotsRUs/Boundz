@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Button, Menu, MenuItem, Avatar, SvgIcon } from '@mui/material';
+import { Button, Menu, MenuItem } from '@mui/material';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logout } from '../store';
 
 export class UserDashboard extends React.Component {
   render() {
@@ -28,7 +29,7 @@ export class UserDashboard extends React.Component {
 
               <Link to="/products">
                 <MenuItem onClick={popupState.close}>
-                  📖&nbsp;&nbsp;&nbsp;Boundz Collection
+                  📖&nbsp;&nbsp;&nbsp;Browse Boundz
                 </MenuItem>
               </Link>
 
@@ -38,36 +39,41 @@ export class UserDashboard extends React.Component {
                 </MenuItem>
               </Link>
 
-              {isLoggedIn ? (
-                <>
-                  <Link to="/users/:userId">
-                    <MenuItem onClick={popupState.close}>
-                      👤&nbsp;&nbsp;&nbsp;My Account
-                    </MenuItem>
-                  </Link>
+              {/* {isLoggedIn && (
+                <Link to="/users/:userId">
                   <MenuItem onClick={popupState.close}>
-                    🧾&nbsp;&nbsp;&nbsp;Past Orders
+                    👤&nbsp;&nbsp;&nbsp;My Account
                   </MenuItem>
-                  <Link to="#" onClick={this.handleClick}>
-                    <MenuItem onClick={popupState.close}>
-                      🔚&nbsp;&nbsp;&nbsp;Logout
-                    </MenuItem>
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link to="/signup">
-                    <MenuItem onClick={popupState.close}>
-                      📜&nbsp;&nbsp;&nbsp;Register Here
-                    </MenuItem>
-                  </Link>
+                </Link>
+              )}
 
-                  <Link to="/login">
-                    <MenuItem onClick={popupState.close}>
-                      🔛&nbsp;&nbsp;&nbsp;Login
-                    </MenuItem>
-                  </Link>
-                </>
+              {isLoggedIn && (
+                <MenuItem onClick={popupState.close}>
+                  🧾&nbsp;&nbsp;&nbsp;Past Orders
+                </MenuItem>
+              )} */}
+
+              {isLoggedIn && (
+                <Link to="/home" onClick={this.props.handleClick}>
+                  <MenuItem onClick={popupState.close}>
+                    <div>🔚&nbsp;&nbsp;&nbsp;Logout</div>
+                  </MenuItem>
+                </Link>
+              )}
+              {!isLoggedIn && (
+                <Link to="/signup">
+                  <MenuItem onClick={popupState.close}>
+                    📜&nbsp;&nbsp;&nbsp;Register Here
+                  </MenuItem>
+                </Link>
+              )}
+
+              {!isLoggedIn && (
+                <Link to="/login">
+                  <MenuItem onClick={popupState.close}>
+                    🔛&nbsp;&nbsp;&nbsp;Login
+                  </MenuItem>
+                </Link>
               )}
             </Menu>
           </React.Fragment>
@@ -87,6 +93,9 @@ const mapDispatch = (dispatch) => {
   return {
     loadInitialData() {
       dispatch(getUser());
+    },
+    handleClick() {
+      dispatch(logout());
     },
   };
 };

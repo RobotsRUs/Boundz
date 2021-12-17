@@ -11,8 +11,7 @@ import Cart from './components/Cart';
 import Checkout from './components/checkout/Checkout';
 import NewUserRegistrationForm from './components/NewUserRegistrationForm';
 import UpdateUserInfo from './components/UpdateUserInfo';
-import UserDashboard from './components/UserDashboard';
-import AdminDashboard from './components/AdminDashboard';
+import UserInfo from './components/AllUsers';
 
 class Routes extends React.Component {
   componentDidMount() {
@@ -32,6 +31,7 @@ class Routes extends React.Component {
           {isAdmin && (
             <Route path="/products/:productId/edit" component={ProductForm} />
           )}
+          {isAdmin && <Route path="/users" component={UserInfo} />}
           <Route path="/products/:productId" component={SingleProduct} />
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/checkout" component={Checkout} />
@@ -46,6 +46,7 @@ class Routes extends React.Component {
               <Route path="/" exact component={Login} />
               <Route path="/login" component={Login} />
               <Route path="/signup" component={NewUserRegistrationForm} />
+              <Route exact path="/users/update" component={UpdateUserInfo} />
             </>
           )}
         </Switch>

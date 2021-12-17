@@ -35,6 +35,7 @@ export class UpdateUserInfo extends React.Component {
     event.preventDefault();
     this.props.updateUser({
       ...this.state,
+      id: this.props.id,
     });
     this.setState({
       firstName: '',
@@ -56,8 +57,6 @@ export class UpdateUserInfo extends React.Component {
   };
 
   render() {
-    console.log('this is this.state', this.state);
-
     return (
       <div>
         <Typography variant="h4">Update Account Info</Typography>
@@ -236,6 +235,16 @@ export class UpdateUserInfo extends React.Component {
   }
 }
 
-const mapDispatch = (dispatch) => {};
+const mapState = (state) => {
+  return {
+    newUser: state.newUser,
+  };
+};
+
+const mapDispatch = (dispatch) => {
+  return {
+    updateUser: (user) => dispatch(updateUser(user)),
+  };
+};
 
 export default connect(null, { updateUser, mapDispatch })(UpdateUserInfo);

@@ -13,20 +13,15 @@ const Navbar = ({ handleClick, isLoggedIn }) => (
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
           <Link to="/menu" component={SearchBar} />
-          <Link to="/cart">
-            <CartIcon />
-          </Link>
+          <Link to="/cart"></Link>
         </div>
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
 
           <Link to="/menu" component={SearchBar} />
-          <Link to="/cart">
-            <CartIcon />
-          </Link>
+          <Link to="/cart"></Link>
         </div>
       )}
     </nav>
