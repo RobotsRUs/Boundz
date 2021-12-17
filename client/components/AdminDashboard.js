@@ -42,6 +42,12 @@ export class AdminDashboard extends React.Component {
                 </MenuItem>
               </Link>
 
+              <Link to="/products/add">
+                <MenuItem onClick={popupState.close}>
+                  ➕&nbsp;&nbsp;&nbsp;Add Products
+                </MenuItem>
+              </Link>
+
               <Link to="/cart">
                 <MenuItem onClick={popupState.close}>
                   🛒&nbsp;&nbsp;&nbsp;Shopping Cart
@@ -53,10 +59,7 @@ export class AdminDashboard extends React.Component {
                   👤&nbsp;&nbsp;&nbsp;My Personal Account
                 </MenuItem>
               </Link>
-
-              <MenuItem onClick={popupState.close}>
-                🧾&nbsp;&nbsp;&nbsp;My Personal Orders
-              </MenuItem> */}
+*/}
 
               <Link to="#" onClick={this.props.handleClick}>
                 <MenuItem onClick={popupState.close}>
