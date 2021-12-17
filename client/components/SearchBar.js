@@ -9,6 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import UserDashboard from './UserDashboard';
 import { connect } from 'react-redux';
 import AdminDashboard from './AdminDashboard';
+import history from '../history';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -78,15 +79,22 @@ export class SearchBar extends React.Component {
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               Boundz Bookz</div>)  })} */}
             </Typography>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search by category"
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </Search>
+            <form
+              onSubmit={(evt) => {
+                evt.preventDefault();
+                history.push(`/products?title=${evt.target[0].value}`);
+              }}
+            >
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search"
+                  inputProps={{ 'aria-label': 'search' }}
+                />
+              </Search>
+            </form>
           </Toolbar>
         </AppBar>
       </Box>
