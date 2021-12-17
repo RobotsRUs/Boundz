@@ -1,14 +1,22 @@
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
+
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Grid,
+  Typography,
+  InputBase,
+} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import UserDashboard from './UserDashboard';
 import { connect } from 'react-redux';
+import CartIcon from './CartIcon';
+import UserDashboard from './UserDashboard';
+
 import AdminDashboard from './AdminDashboard';
+
+import { Link } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -54,39 +62,39 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export class SearchBar extends React.Component {
   render() {
-    const { checkAdmin } = this.props;
+    const { isLoggedIn } = this.props;
     return (
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="sticky" style={{ background: '#000000' }}>
           <Toolbar>
-            <Typography
-              variant="h3"
-              noWrap
-              component="div"
-              sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-            >
-              <div>
-                <AdminDashboard />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                Boundz Bookz
-              </div>
-              {/* {!isLoggedIn ? (<div><UserDashboard />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              Boundz Bookz</div>) : ({checkAdmin ? (<div><AdminDashboard />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              Boundz Bookz</div>) : (<div><UserDashboard />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              Boundz Bookz</div>)  })} */}
-            </Typography>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search by category"
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </Search>
+            <Grid item container xs={6} sm={12}>
+              <Typography
+                variant="h3"
+                noWrap
+                component="div"
+                sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+              >
+                <div>
+                  <AdminDashboard />
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  Boundz Bookz
+                </div>
+              </Typography>
+              {/* <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search by category"
+                  inputProps={{ 'aria-label': 'search' }}
+                />
+              </Search> */}
+              <Grid>
+                <Link to="/cart">
+                  <CartIcon />
+                </Link>
+              </Grid>
+            </Grid>
           </Toolbar>
         </AppBar>
       </Box>
@@ -97,7 +105,6 @@ export class SearchBar extends React.Component {
 const mapState = (state) => {
   return {
     isLoggedIn: !!state.auth.id,
-    // checkAdmin: this.state.isAdmin,
   };
 };
 
