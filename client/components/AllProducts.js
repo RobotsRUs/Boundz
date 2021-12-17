@@ -13,6 +13,8 @@ import {
   Grid,
   IconButton,
   Collapse,
+  Pagination,
+  Stack,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { styled } from '@mui/material/styles';
@@ -39,6 +41,7 @@ class AllProducts extends React.Component {
     };
     this.handleExpandedClick = this.handleExpandedClick.bind(this);
     this.loadPage = this.loadPage.bind(this);
+    this.handleChange.bind(this);
   }
 
   handleExpandedClick = () => {
@@ -58,6 +61,12 @@ class AllProducts extends React.Component {
     return this.props.fetchAllProductsThunk(params);
   };
 
+  handleChange = (event) => {
+    this.setState({
+      currentPage: parseInt(event.target.outerText),
+    });
+  };
+
   componentDidMount() {
     this.loadPage();
   }
@@ -67,8 +76,7 @@ class AllProducts extends React.Component {
       const params = new URLSearchParams(location.search);
       params.set('page', this.state.currentPage);
       const query = params.toString();
-      console.log('the query: ' + query);
-      this.props.history.push(location.pathname + '?' + query);
+      this.props.fetchAllProductsThunk(query);
     }
   }
   render() {
@@ -91,7 +99,9 @@ class AllProducts extends React.Component {
                 <Typography variant="body2">
                   {product.minprice === product.maxprice
                     ? formatUSD(product.maxprice)
-                    : formatUSD(product.minprice) - formatUSD(product.maxprice)}
+                    : `${formatUSD(product.minprice)} - ${formatUSD(
+                        product.maxprice
+                      )}`}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -117,6 +127,15 @@ class AllProducts extends React.Component {
             </Card>
           </Grid>
         ))}
+        <Stack spacing={2}>
+          <Pagination
+            count={
+              allProducts.length ? Math.ceil(allProducts[0].totalcount / 12) : 1
+            }
+            page={this.state.currentPage}
+            onChange={this.handleChange}
+          />
+        </Stack>
       </Grid>
     );
   }
