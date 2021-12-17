@@ -38,7 +38,7 @@ export class AdminDashboard extends React.Component {
 
               <Link to="/products/add">
                 <MenuItem onClick={popupState.close}>
-                  🧾&nbsp;&nbsp;&nbsp;Add Products
+                  ➕&nbsp;&nbsp;&nbsp;Add Products
                 </MenuItem>
               </Link>
 
