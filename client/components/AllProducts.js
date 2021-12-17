@@ -34,9 +34,11 @@ class AllProducts extends React.Component {
   constructor() {
     super();
     this.state = {
+      currentPage: 1,
       expanded: false,
     };
     this.handleExpandedClick = this.handleExpandedClick.bind(this);
+    this.loadPage = this.loadPage.bind(this);
   }
 
   handleExpandedClick = () => {
@@ -45,17 +47,37 @@ class AllProducts extends React.Component {
     };
   };
 
+  loadPage = () => {
+    const params = new URLSearchParams(location.search);
+    const page = parseInt(params.get('page')) || 1;
+    if (page !== this.state.currentPage) {
+      this.setState({
+        currentPage: page,
+      });
+    }
+    return this.props.fetchAllProductsThunk(params);
+  };
+
   componentDidMount() {
-    this.props.fetchAllProductsThunk();
+    this.loadPage();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.currentPage !== this.state.currentPage) {
+      const params = new URLSearchParams(location.search);
+      params.set('page', this.state.currentPage);
+      const query = params.toString();
+      console.log('the query: ' + query);
+      this.props.history.push(location.pathname + '?' + query);
+    }
+  }
   render() {
     const allProducts = this.props.products;
     return (
-      <Grid container spacing={0.5}>
+      <Grid container spacing={0.5} justifyContent="space-evenly">
         {allProducts.map((product) => (
-          <Grid key={product.id} item xs={4}>
-            <Card sx={{ maxWidth: 400 }}>
+          <Grid key={product.id} item xs={2.5}>
+            <Card sx={{ maxWidth: 300 }}>
               <CardMedia
                 component="img"
                 height="400"
@@ -67,7 +89,9 @@ class AllProducts extends React.Component {
 
                 <Typography variant="body2">{product.author}</Typography>
                 <Typography variant="body2">
-                  {formatUSD(product.price)}
+                  {product.minprice === product.maxprice
+                    ? formatUSD(product.maxprice)
+                    : formatUSD(product.minprice) - formatUSD(product.maxprice)}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -104,7 +128,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchAllProductsThunk: () => dispatch(fetchAllProductsThunk()),
+    fetchAllProductsThunk: (query) => dispatch(fetchAllProductsThunk(query)),
   };
 };
 

@@ -7,14 +7,16 @@ const fetchAllProducts = (productList) => ({
   productList,
 });
 
-export const fetchAllProductsThunk = () => async (dispatch) => {
-  try {
-    const { data } = await axios.get('/api/products');
-    dispatch(fetchAllProducts(data));
-  } catch (error) {
-    console.error('There was an error retrieving all products: ', error);
-  }
-};
+export const fetchAllProductsThunk =
+  (query = '') =>
+  async (dispatch) => {
+    try {
+      const { data } = await axios.get(`/api/products?${query}`);
+      dispatch(fetchAllProducts(data));
+    } catch (error) {
+      console.error('There was an error retrieving all products: ', error);
+    }
+  };
 
 export default function productsReducer(state = [], action) {
   switch (action.type) {
