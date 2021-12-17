@@ -168,7 +168,6 @@ router.put(
             price: book.price,
             ISBN13: book.ISBN13,
           });
-          console.log(foundBook);
           await foundBook.save();
           newVariations.push(foundBook);
         } else {

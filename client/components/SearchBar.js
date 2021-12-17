@@ -66,14 +66,16 @@ export class SearchBar extends React.Component {
     const { isLoggedIn } = this.props;
     return (
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="sticky" style={{ background: '#000000' }}>
+        <AppBar position="sticky" style={{ background: '#ffffff' }}>
           <Toolbar>
             <Grid item container xs={6} sm={12}>
               {<AdminDashboard />}
               <Link to="/products">Browse</Link>
             </Grid>
             <Grid justifyContent={'flex-start'} item container xs={6} sm={12}>
-              <div>Boundz Bookz</div>
+              <Typography variant="h4" color="black">
+                Boundz Bookz
+              </Typography>
             </Grid>
 
             {/* <Search>
