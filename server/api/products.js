@@ -29,7 +29,7 @@ router.get('/', async (req, res, next) => {
   const filters = [];
   if (author) filters.push(`author ILIKE '%${author}%'`);
   if (category) filters.push(`category ILIKE '${category}'`);
-  if (title) filters.push(`title ILIKE '${title}%'`);
+  if (title) filters.push(`title ILIKE '%${title}%'`);
   try {
     const QUERY = `
     WITH added_row_number AS (

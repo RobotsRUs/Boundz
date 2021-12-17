@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fetchProduct, clearProduct, addToCart } from '../store';
 import Loading from './Loading';
 import { formatUSD, qtyArray } from './utils';
+import { Link } from 'react-router-dom';
 import NativeSelect from '@mui/material/NativeSelect';
 import {
   Alert,
@@ -26,9 +27,9 @@ import {
   Tab,
   IconButton,
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import EditIcon from '@mui/icons-material/Edit';
-import { Link } from 'react-router-dom';
 import Delete from '@mui/icons-material/Delete';
 import axios from 'axios';
 import Display404 from './Display404';
@@ -191,7 +192,10 @@ class SingleProduct extends React.Component {
                   <Grid item container direction="column" spacing={1}>
                     <Grid item>
                       <Typography variant="h4">{title}</Typography>
-                      <Typography variant="subtitle">by {author}</Typography>
+                      <Typography variant="subtitle">
+                        by{' '}
+                        <Link to={`/products?author=${author}`}>{author}</Link>
+                      </Typography>
                       <Typography variant="subtitle2" color="text.secondary">
                         {formatUSD(price)}
                       </Typography>
@@ -270,10 +274,24 @@ class SingleProduct extends React.Component {
                   <li>Publisher: {publisher}</li>
                   <li>Length: {length}</li>
                   <li>ISBN13: {ISBN13}</li>
-                  <li>Category: {category}</li>
+                  <li>
+                    Category:{' '}
+                    <Link to={`/products?category=${category}`}>
+                      {category}
+                    </Link>
+                  </li>
                 </ul>
               </TabPanel>
             </Box>
+            <Link to={`/products?category=${category}`}>
+              <Button
+                color="success"
+                variant="outlined"
+                startIcon={<ArrowBackIcon />}
+              >
+                View all in {category}
+              </Button>
+            </Link>
           </Stack>
           {/* Confirm Delete Dialog */}
           <Dialog
