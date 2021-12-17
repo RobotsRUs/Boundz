@@ -14,7 +14,6 @@ export default class UserInfo extends React.Component {
   }
 
   render() {
-    console.log(this.state.users);
     return this.state.users.map((user) => (
       <div key={user.id}>
         <div>

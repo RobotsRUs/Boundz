@@ -28,8 +28,6 @@ const _updateUser = (userBeingUpdated) => ({
 export const createUser = (newUser) => async (dispatch) => {
   try {
     const { data } = await axios.post('/api/users', newUser);
-    console.log('This is the thunk data: ', data);
-    //window.localStorage.setItem(TOKEN, res.data.token)
     dispatch(_createUser(data));
   } catch (error) {
     console.error('There was an error creating new user: ', error);
@@ -71,7 +69,6 @@ export const updateUser = (user) => async (dispatch) => {
 export const authenticate = (userObject, method) => async (dispatch) => {
   try {
     const res = await axios.post(`/auth/${method}`, userObject);
-    console.log(res);
     window.localStorage.setItem(TOKEN, res.data.token);
     dispatch(getUser());
   } catch (authError) {

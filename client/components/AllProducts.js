@@ -53,22 +53,31 @@ class AllProducts extends React.Component {
   render() {
     const allProducts = this.props.products;
     return (
-      <Grid container spacing={0.5} justifyContent="space-evenly">
-        {allProducts.map((product) => (
-          <Grid key={product.id} item xs={2.5}>
-            <ProductCard product={product} />
-          </Grid>
-        ))}
-        <Stack spacing={2}>
+      <>
+        <Grid container spacing={0.5} justifyContent="space-evenly">
+          {allProducts.map((product) => (
+            <Grid key={product.id} item xs={2.5}>
+              <ProductCard product={product} />
+            </Grid>
+          ))}
+        </Grid>
+        <Stack
+          spacing={2}
+          paddingTop={2}
+          justifyContent={'center'}
+          alignItems={'center'}
+        >
           <Pagination
             count={
               allProducts.length ? Math.ceil(allProducts[0].totalcount / 12) : 1
             }
             page={this.state.currentPage}
             onChange={this.handleChange}
+            hidePrevButton
+            hideNextButton
           />
         </Stack>
-      </Grid>
+      </>
     );
   }
 }

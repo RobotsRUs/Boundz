@@ -19,9 +19,12 @@ const Navbar = ({ handleClick, isLoggedIn }) => (
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
-
-          <Link to="/menu" component={SearchBar} />
-          <Link to="/cart"></Link>
+          <Link to="/products">Browse</Link>
+          <Link to="/">Login</Link>
+          <Link to="/signup">Register</Link>
+          <Link to="/cart">
+            <CartIcon />
+          </Link>
         </div>
       )}
     </nav>

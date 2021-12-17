@@ -66,22 +66,19 @@ export class SearchBar extends React.Component {
     const { isLoggedIn } = this.props;
     return (
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="sticky" style={{ background: '#000000' }}>
+        <AppBar position="sticky" style={{ background: '#ffffff' }}>
           <Toolbar>
             <Grid item container xs={6} sm={12}>
-              <Typography
-                variant="h3"
-                noWrap
-                component="div"
-                sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-              >
-                <div>
-                  <AdminDashboard />
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  Boundz Bookz
-                </div>
+              {<AdminDashboard />}
+              <Link to="/products">Browse</Link>
+            </Grid>
+            <Grid justifyContent={'flex-start'} item container xs={6} sm={12}>
+              <Typography variant="h4" color="black">
+                Boundz Bookz
               </Typography>
-              {/* <Search>
+            </Grid>
+
+            {/* <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
                 </SearchIconWrapper>
@@ -90,11 +87,10 @@ export class SearchBar extends React.Component {
                   inputProps={{ 'aria-label': 'search' }}
                 />
               </Search> */}
-              <Grid>
-                <Link to="/cart">
-                  <CartIcon />
-                </Link>
-              </Grid>
+            <Grid>
+              <Link to="/cart">
+                <CartIcon />
+              </Link>
             </Grid>
           </Toolbar>
         </AppBar>

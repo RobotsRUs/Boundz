@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { ImageList, ImageListItem } from '@mui/material';
+import { ImageList, ImageListItem, Stack } from '@mui/material';
 import { connect } from 'react-redux';
-import { picData } from './picData';
+import { picData } from '../../bin/picData';
 
 export class Home extends React.Component {
   render() {
@@ -9,7 +9,7 @@ export class Home extends React.Component {
 
     return (
       <div>
-        <div>
+        <Stack justifyContent="center" alignItems="center">
           <h1>
             WELCOME👐BIENVENIDO👐BIENVENUE👐ДОБРО
             ПОЖАЛОВАТЬ👐أهلابك👐BIENVENI👐환영하다👐WELKOM👐ようこそ👐ברוך הבא
@@ -19,24 +19,25 @@ export class Home extends React.Component {
           <h1>
             FAMILY👐FAMILIA👐FAMILLE👐СЕМЬЯ👐أسرة👐FANMI👐가족👐FAMILIE👐家族👐מִשׁפָּחָה
           </h1>
-        </div>
-        <ImageList
-          sx={{ width: 1800, height: 1100 }}
-          variant="woven"
-          cols={6}
-          gap={100}
-        >
-          {picData.map((item) => (
-            <ImageListItem key={item.img}>
-              <img
-                src={`${item.img}?w=161&fit=crop&auto=format`}
-                srcSet={`${item.img}?w=161&fit=crop&auto=format&dpr=2 2x`}
-                alt={item.title}
-                loading="lazy"
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
+        </Stack>
+        <Stack direction="row" justifyContent="center" alignItems="flex-start">
+          <ImageList
+            sx={{ width: 1800, height: 1100 }}
+            variant="woven"
+            cols={6}
+            gap={10}
+          >
+            {picData.map((item) => (
+              <ImageListItem key={item.img}>
+                <img
+                  src={`${item.img}?w=161&fit=crop&auto=format`}
+                  alt={item.title}
+                  loading="lazy"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Stack>
       </div>
     );
   }
