@@ -59,13 +59,15 @@ class AllProducts extends React.Component {
             <ProductCard product={product} />
           </Grid>
         ))}
-        <Stack spacing={2}>
+        <Stack spacing={2} paddingTop={2}>
           <Pagination
             count={
               allProducts.length ? Math.ceil(allProducts[0].totalcount / 12) : 1
             }
             page={this.state.currentPage}
             onChange={this.handleChange}
+            hidePrevButton
+            hideNextButton
           />
         </Stack>
       </Grid>
